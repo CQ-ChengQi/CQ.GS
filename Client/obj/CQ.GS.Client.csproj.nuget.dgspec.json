@@ -1,33 +1,40 @@
 {
   "format": 1,
   "restore": {
-    "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj": {}
+    "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj": {}
   },
   "projects": {
-    "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj": {
+    "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj",
+        "projectUniqueName": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj",
         "projectName": "CQ.GS.Client",
-        "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj",
-        "packagesPath": "/Users/chengqi/.nuget/packages/",
-        "outputPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/obj/",
+        "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj",
+        "packagesPath": "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/chengqi/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\chengqi.ONLYEDUGROUP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj": {
-                "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj"
+              "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj": {
+                "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj"
               }
             }
           }
@@ -54,6 +61,10 @@
             "Mudblazor": {
               "target": "Package",
               "version": "[6.10.0, )"
+            },
+            "Z.Blazor.Diagrams": {
+              "target": "Package",
+              "version": "[3.0.0, )"
             }
           },
           "imports": [
@@ -70,7 +81,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[7.0.11, 7.0.11]"
+              "version": "[7.0.3, 7.0.3]"
             }
           ],
           "frameworkReferences": {
@@ -78,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -87,22 +98,29 @@
         }
       }
     },
-    "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj": {
+    "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj",
+        "projectUniqueName": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj",
         "projectName": "CQ.GS.Shared",
-        "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj",
-        "packagesPath": "/Users/chengqi/.nuget/packages/",
-        "outputPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/obj/",
+        "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj",
+        "packagesPath": "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/chengqi/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\chengqi.ONLYEDUGROUP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -136,7 +154,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

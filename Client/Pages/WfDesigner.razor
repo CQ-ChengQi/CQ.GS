@@ -1,0 +1,71 @@
+@page "/wf-designer"
+
+@using Blazor.Diagrams.Components
+@using Blazor.Diagrams.Components.Widgets
+@using Blazor.Diagrams.Core.Anchors;
+@using Blazor.Diagrams.Core.Geometry;
+@using Blazor.Diagrams.Core.Models;
+@using Blazor.Diagrams.Options;
+@using CQ.GS.Client.Components.WorkflowDesigner;
+@using CQ.GS.Client.Models.Diagrams;
+@using CQ.GS.Client.Services;
+
+<MudPaper >
+    <MudContainer MaxWidth="MaxWidth.Medium">
+
+        <MudPaper Height="calc(100vh - 64px)" Square="true">
+            <CascadingValue Value="diagram">
+                <DiagramCanvas></DiagramCanvas>
+            </CascadingValue>
+        </MudPaper>
+    </MudContainer>
+</MudPaper>
+
+
+
+
+
+
+@code {
+
+    [Inject]
+    private AppSettings? _appSettings { get; set; }
+
+    private BlazorDiagram? diagram;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        var options = new BlazorDiagramOptions();
+        options.AllowMultiSelection = true;
+        options.Zoom.Enabled = false;
+
+        diagram = new BlazorDiagram(options);
+
+        diagram.RegisterComponent<TwoNumbersNode, TwoNumbersWidget>();
+
+        var node1 = new NodeModel(position: new Point(50, 50));
+        node1.Title = "Node 1";
+
+        var node2 = new NodeModel(position: new Point(500, 200));
+        node2.Title = "Node 2";
+
+        var leftPort = node2.AddPort(PortAlignment.Left);
+        var rightPort = node2.AddPort(PortAlignment.Right);
+
+        var sourceAnchor = new ShapeIntersectionAnchor(node1);
+        var targetAnchor = new SinglePortAnchor(leftPort);
+        var link = diagram.Links.Add(new LinkModel(sourceAnchor, targetAnchor));
+
+        diagram.Nodes.Add(node1);
+        diagram.Nodes.Add(node2);
+
+        var node = new TwoNumbersNode(new Point(80, 80));
+        node.AddPort(PortAlignment.Top);
+        node.AddPort(PortAlignment.Bottom);
+        node.Title = "≤‚ ‘";
+
+        diagram.Nodes.Add(node);
+    }
+}

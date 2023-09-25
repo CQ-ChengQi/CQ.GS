@@ -475,6 +475,15 @@
           "buildMultiTargeting/MudBlazor.props": {}
         }
       },
+      "SvgPathProperties/1.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
+        }
+      },
       "System.IO.Pipelines/7.0.0": {
         "type": "package",
         "compile": {
@@ -530,6 +539,38 @@
         },
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
+        }
+      },
+      "Z.Blazor.Diagrams/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.0",
+          "Microsoft.AspNetCore.Components.Web": "6.0.0",
+          "Z.Blazor.Diagrams.Core": "3.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Blazor.Diagrams.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Blazor.Diagrams.dll": {}
+        },
+        "build": {
+          "buildTransitive/Z.Blazor.Diagrams.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Z.Blazor.Diagrams.props": {}
+        }
+      },
+      "Z.Blazor.Diagrams.Core/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SvgPathProperties": "1.1.2"
+        },
+        "compile": {
+          "lib/net6.0/Blazor.Diagrams.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Blazor.Diagrams.Core.dll": {}
         }
       },
       "CQ.GS.Shared/1.0.0": {
@@ -1017,6 +1058,15 @@
           "buildMultiTargeting/MudBlazor.props": {}
         }
       },
+      "SvgPathProperties/1.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
+        }
+      },
       "System.IO.Pipelines/7.0.0": {
         "type": "package",
         "compile": {
@@ -1066,6 +1116,38 @@
         },
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
+        }
+      },
+      "Z.Blazor.Diagrams/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.0",
+          "Microsoft.AspNetCore.Components.Web": "6.0.0",
+          "Z.Blazor.Diagrams.Core": "3.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Blazor.Diagrams.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Blazor.Diagrams.dll": {}
+        },
+        "build": {
+          "buildTransitive/Z.Blazor.Diagrams.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Z.Blazor.Diagrams.props": {}
+        }
+      },
+      "Z.Blazor.Diagrams.Core/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SvgPathProperties": "1.1.2"
+        },
+        "compile": {
+          "lib/net6.0/Blazor.Diagrams.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Blazor.Diagrams.Core.dll": {}
         }
       },
       "CQ.GS.Shared/1.0.0": {
@@ -1857,6 +1939,19 @@
         "staticwebassets/MudBlazor.min.js"
       ]
     },
+    "SvgPathProperties/1.1.2": {
+      "sha512": "oqCX5+CxcLfC1lC6gfzOSM+WOmfwn4V7yzMHQfofi+QmYoY+Hq5oye6BgnqhHC+3BSsiadLSOnfYxpcv/enkcw==",
+      "type": "package",
+      "path": "svgpathproperties/1.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/SvgPathProperties.dll",
+        "svgpathproperties.1.1.2.nupkg.sha512",
+        "svgpathproperties.nuspec"
+      ]
+    },
     "System.IO.Pipelines/7.0.0": {
       "sha512": "jRn6JYnNPW6xgQazROBLSfpdoczRw694vO5kKvMcNnpXuolEixUyw6IBuBs2Y2mlSX/LdLvyyWmfXhaI3ND1Yg==",
       "type": "package",
@@ -1986,6 +2081,48 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Z.Blazor.Diagrams/3.0.0": {
+      "sha512": "uTd6zZ1QvTz/HurwysW6uhdXp8TbeZg1QO4vPFpQiIiwVzUtrAVLioRPA7f2+RW0RcbaM4f2lNMiIBQWDkiQ2Q==",
+      "type": "package",
+      "path": "z.blazor.diagrams/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "ZBD.png",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "build/Z.Blazor.Diagrams.props",
+        "buildMultiTargeting/Z.Blazor.Diagrams.props",
+        "buildTransitive/Z.Blazor.Diagrams.props",
+        "lib/net6.0/Blazor.Diagrams.dll",
+        "staticwebassets/Z.Blazor.Diagrams.bundle.scp.css",
+        "staticwebassets/default.styles.css",
+        "staticwebassets/default.styles.min.css",
+        "staticwebassets/default.styles.min.css.gz",
+        "staticwebassets/script.js",
+        "staticwebassets/script.min.js",
+        "staticwebassets/script.min.js.gz",
+        "staticwebassets/style.css",
+        "staticwebassets/style.min.css",
+        "staticwebassets/style.min.css.gz",
+        "z.blazor.diagrams.3.0.0.nupkg.sha512",
+        "z.blazor.diagrams.nuspec"
+      ]
+    },
+    "Z.Blazor.Diagrams.Core/3.0.0": {
+      "sha512": "/ojZYjpyDMosoP+g1Uu55G1E1X9GJphITG/MqH65uVvQXtmil3SpF0bJ2ekW83te0JF77TfZZlZLKs98bEGasw==",
+      "type": "package",
+      "path": "z.blazor.diagrams.core/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "ZBD.png",
+        "lib/net6.0/Blazor.Diagrams.Core.dll",
+        "z.blazor.diagrams.core.3.0.0.nupkg.sha512",
+        "z.blazor.diagrams.core.nuspec"
+      ]
+    },
     "CQ.GS.Shared/1.0.0": {
       "type": "project",
       "path": "../Shared/CQ.GS.Shared.csproj",
@@ -1997,36 +2134,45 @@
       "CQ.GS.Shared >= 1.0.0",
       "Microsoft.AspNetCore.Components.WebAssembly >= 7.0.11",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 7.0.11",
-      "Mudblazor >= 6.10.0"
+      "Mudblazor >= 6.10.0",
+      "Z.Blazor.Diagrams >= 3.0.0"
     ]
   },
   "packageFolders": {
-    "/Users/chengqi/.nuget/packages/": {}
+    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj",
+      "projectUniqueName": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj",
       "projectName": "CQ.GS.Client",
-      "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj",
-      "packagesPath": "/Users/chengqi/.nuget/packages/",
-      "outputPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/obj/",
+      "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj",
+      "packagesPath": "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\",
+      "outputPath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/chengqi/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\chengqi.ONLYEDUGROUP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj": {
-              "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj"
+            "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj": {
+              "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj"
             }
           }
         }
@@ -2053,6 +2199,10 @@
           "Mudblazor": {
             "target": "Package",
             "version": "[6.10.0, )"
+          },
+          "Z.Blazor.Diagrams": {
+            "target": "Package",
+            "version": "[3.0.0, )"
           }
         },
         "imports": [
@@ -2069,7 +2219,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-            "version": "[7.0.11, 7.0.11]"
+            "version": "[7.0.3, 7.0.3]"
           }
         ],
         "frameworkReferences": {
@@ -2077,7 +2227,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
