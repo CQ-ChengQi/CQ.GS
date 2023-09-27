@@ -30,14 +30,14 @@
     </MudItem>
     <MudItem md="3" xs="12">
         <MudDropContainer T="DropItem" Items="_items" ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)"
-            ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                          ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
             <ChildContent>
                 <MudDropZone T="DropItem" Identifier="Drop Zone 1"
-                    Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
+                             Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
                     <MudText Typo="Typo.h6" Class="mb-4">Drop Zone 1</MudText>
                 </MudDropZone>
                 <MudDropZone T="DropItem" Identifier="Drop Zone 2"
-                    Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
+                             Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
                     <MudText Typo="Typo.h6" Class="mb-4">Drop Zone 2</MudText>
                 </MudDropZone>
             </ChildContent>
@@ -72,7 +72,11 @@
 
     private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
     {
-        dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
+        if (dropItem != null && dropItem.Item != null)
+        {
+            dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
+        }
+
     }
 
     private List<DropItem> _items = new()
@@ -84,8 +88,8 @@
 
     public class DropItem
     {
-        public string Name { get; init; }
-        public string Identifier { get; set; }
+        public string Name { get; init; } = string.Empty;
+        public string Identifier { get; set; } = string.Empty;
     }
 
     protected override void OnInitialized()
@@ -99,6 +103,7 @@
         diagram = new BlazorDiagram(options);
 
         diagram.RegisterComponent<TwoNumbersNode, TwoNumbersWidget>();
+        diagram.RegisterComponent<ListNode, ListWidget>();
 
         var node1 = new NodeModel(position: new Point(50, 50));
         node1.Title = "Node 1";
@@ -117,9 +122,12 @@
         diagram.Nodes.Add(node2);
 
         var node = new TwoNumbersNode(new Point(80, 80));
-        node.AddPort(PortAlignment.Top);
-        node.AddPort(PortAlignment.Bottom);
+        node.AddPort(PortAlignment.Right);
 
         diagram.Nodes.Add(node);
+
+        var node3 = new ListNode(new Point(200, 200));
+        diagram.Nodes.Add(node3);
+
     }
 }

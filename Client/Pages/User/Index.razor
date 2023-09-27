@@ -1,0 +1,104 @@
+﻿@page "/user"
+
+@using CQ.GS.Client.Services;
+@using CQ.GS.Shared;
+
+@inject UserService UserService
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pt-4">
+    @*    <MudDataGrid @ref="@dataGrid" Items="users" Class="full" Hover="true">
+    <ToolBarContent>
+    <MudText Typo="Typo.h5">用户列表</MudText>
+    <MudSpacer />
+    <MudTextField Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+    <PropertyColumn Property="x => x != null ? x.Name : string.Empty" Title="名称" Sortable="false" Filterable="false" />
+    <PropertyColumn Property="x => x != null ? x.Gender : string.Empty" Title="性别" />
+    <TemplateColumn CellClass="justify-center" Title="操作" Sortable="false" Filterable="false" style="width:10em">
+    <CellTemplate>
+    <MudStack Row="true">
+    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">编辑</MudButton>
+    </MudStack>
+    </CellTemplate>
+    </TemplateColumn>
+    </Columns>
+    <PagerContent>
+    <MudPagination Size="Size.Small" Variant="Variant.Filled" Class="ma-4" Count="4"></MudPagination>
+    </PagerContent>
+    </MudDataGrid>*@
+    <MudPaper Class="mb-4">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </MudPaper>
+
+    <MudTable @ref="table" Items="users" Hover="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h5">用户列表</MudText>
+            <MudSpacer />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh Style="width:200px;">
+                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Name)">
+                    姓名
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>性别</MudTh>
+            <MudTh Style="width:200px;">操作</MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Gender">@context.Gender</MudTd>
+            <MudTd DataLabel="Action">
+                <MudStack Row="true">
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">编辑</MudButton>
+                </MudStack>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="每页显示条目" InfoFormat="当前页 {first_item} / {last_item}"></MudTablePager>
+    
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+@code {
+    private MudTable<User>? table;
+    private IEnumerable<User> users = new List<User>();
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "#"),
+        new BreadcrumbItem("Link 1", href: "#"),
+        new BreadcrumbItem("Link 2", href: null, disabled: true)
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitUsers();
+    }
+
+
+    /// <summary>
+    /// 分页 。
+    /// </summary>
+    /// <param name="i"></param>
+    private void PageChanged(int i)
+    {
+        table?.NavigateTo(i);
+    }
+
+    /// <summary>
+    /// 获取用户列表 。
+    /// </summary>
+    /// <returns></returns>
+    private async Task InitUsers()
+    {
+        var result = await UserService.GetUsers();
+        if (result != null)
+        {
+            users = result;
+        }
+    }
+}

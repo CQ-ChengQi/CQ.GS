@@ -1,24 +1,31 @@
 ﻿@using Blazor.Diagrams.Components.Renderers;
 @using CQ.GS.Client.Models.Diagrams;
 
+<div class="app-main">
+    <MudCard Class="pa-4 app-main-card">
 
-<MudCard Style="width:400px;" Class="pa-4">
-    <MudStack Spacing="4">
-        <MudTextField T="string" Label="Card number" Mask="@(new PatternMask("0000 0000 0000 0000"))" />
-        <MudStack Row="true">
-            <MudTextField T="string" Label="Expires" Mask="@(new DateMask("MM/YY", 'Y', 'M'))" />
-            <MudTextField T="string" Label="CVC" Mask="@(new PatternMask("000"))" />
+        <MudStack Spacing="4">
+            <MudTextField T="string" Label="Card number" Mask="@(new PatternMask("0000 0000 0000 0000"))" />
+            <MudStack Row="true">
+                <MudTextField T="string" Label="Expires" Mask="@(new DateMask("MM/YY", 'Y', 'M'))" />
+                <MudTextField T="string" Label="CVC" Mask="@(new PatternMask("000"))" />
+            </MudStack>
         </MudStack>
-    </MudStack>
-</MudCard>
 
-@if (Node != null)
-{
-    foreach (var port in Node.Ports)
+       
+    </MudCard>
+    @if (Node != null)
     {
-        <PortRenderer @key="port" Port="port" />
+        foreach (var port in Node.Ports)
+        {
+            <PortRenderer @key="port" Port="port">
+                <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar>
+            </PortRenderer>
+        }
     }
-}
+</div>
+
+
 
 
 @code {

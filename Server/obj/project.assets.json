@@ -488,6 +488,19 @@
           "buildMultiTargeting/MudBlazor.props": {}
         }
       },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SvgPathProperties/1.1.2": {
         "type": "package",
         "compile": {
@@ -1278,6 +1291,36 @@
         "staticwebassets/MudBlazor.min.js"
       ]
     },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "SvgPathProperties/1.1.2": {
       "sha512": "oqCX5+CxcLfC1lC6gfzOSM+WOmfwn4V7yzMHQfofi+QmYoY+Hq5oye6BgnqhHC+3BSsiadLSOnfYxpcv/enkcw==",
       "type": "package",
@@ -1477,39 +1520,48 @@
     "net7.0": [
       "CQ.GS.Client >= 1.0.0",
       "CQ.GS.Shared >= 1.0.0",
-      "Microsoft.AspNetCore.Components.WebAssembly.Server >= 7.0.11"
+      "Microsoft.AspNetCore.Components.WebAssembly.Server >= 7.0.11",
+      "Newtonsoft.Json >= 13.0.3"
     ]
   },
   "packageFolders": {
-    "/Users/chengqi/.nuget/packages/": {}
+    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Server/CQ.GS.Server.csproj",
+      "projectUniqueName": "D:\\Git\\ChengQi\\CQ.GS\\Server\\CQ.GS.Server.csproj",
       "projectName": "CQ.GS.Server",
-      "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Server/CQ.GS.Server.csproj",
-      "packagesPath": "/Users/chengqi/.nuget/packages/",
-      "outputPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Server/obj/",
+      "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Server\\CQ.GS.Server.csproj",
+      "packagesPath": "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\",
+      "outputPath": "D:\\Git\\ChengQi\\CQ.GS\\Server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/chengqi/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\chengqi.ONLYEDUGROUP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj": {
-              "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Client/CQ.GS.Client.csproj"
+            "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj": {
+              "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj"
             },
-            "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj": {
-              "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj"
+            "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj": {
+              "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj"
             }
           }
         }
@@ -1527,6 +1579,10 @@
           "Microsoft.AspNetCore.Components.WebAssembly.Server": {
             "target": "Package",
             "version": "[7.0.11, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
           }
         },
         "imports": [
@@ -1548,7 +1604,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

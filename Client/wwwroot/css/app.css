@@ -19,7 +19,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -99,3 +99,26 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+
+/*.diagram-port {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    background-color: black;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+    .diagram-port.top {
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        top: -10px;
+    }
+
+    .diagram-port.bottom {
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        bottom: -30px;
+    }
+*/

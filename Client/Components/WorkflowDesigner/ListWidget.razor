@@ -1,0 +1,35 @@
+﻿@using Blazor.Diagrams.Components.Renderers;
+@using CQ.GS.Client.Models.Diagrams;
+
+<MudPaper Width="20em" Square="true">
+    <MudList Clickable="true">
+        @foreach (var item in _items)
+        {
+            <MudListItem>
+                <MudStack Row="true">
+                    <MudListItem>@item.Title</MudListItem>
+                    <MudListItem>@item.Title</MudListItem>
+                </MudStack>
+
+            </MudListItem>
+        }
+    </MudList>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public ListNode? Node { get; set; }
+
+    private List<ListItem> _items = new List<ListItem>
+    {
+        new ListItem { Title = "Inbox" },
+        new ListItem { Title = "Sent" },
+        new ListItem { Title = "Drafts" },
+        new ListItem { Title = "Spam" }
+    };
+
+    public class ListItem
+    {
+        public string Title { get; set; } = string.Empty;
+    }
+}
