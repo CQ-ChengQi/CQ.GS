@@ -1,0 +1,144 @@
+﻿@using System.Reflection;
+@inject NavigationManager Navmgr;
+
+<MudDynamicTabs Elevation="1" Rounded="false" PanelClass="pt-6" @bind-ActivePanelIndex="@tabsIndex" @ref="@tabs" CloseTab="CloseTabCallback">
+
+    @foreach (var item in Pages)
+    {
+
+        <MudTabPanel ID="@item.Url" Text="@item.Title" ShowCloseIcon="true">
+            @if (Body != null)
+            {
+                @Body(item)
+            }
+            else
+            {
+                @item.Body
+            }
+        </MudTabPanel>
+    }
+
+
+</MudDynamicTabs>
+
+@code {
+    MudTabs? tabs;
+
+    [Parameter]
+    public RenderFragment<ReuseTabsPageItem> Body { get; set; } = context =>
+
+    {
+
+        return context.Body;
+    };
+
+
+    [CascadingParameter]
+    private RouteData? RouteData { get; set; }
+
+    private readonly Dictionary<string, ReuseTabsPageItem> _pageMap = new();
+
+
+    private ReuseTabsPageItem[] Pages => _pageMap.Values.Where(x => !x.Ignore).OrderBy(x => x.CreatedAt).ToArray();
+
+    void CloseTabCallback(MudTabPanel panel) => RemoveTab((string)panel.ID);
+
+    private int tabsIndex;
+    private bool stateHasChanged;
+
+    public void RemoveTab(string url)
+    {
+        _pageMap.Remove(url);
+
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (stateHasChanged)
+        {
+            stateHasChanged = false;
+            StateHasChanged();
+        }
+    }
+
+
+    private string CurrentUrl
+    {
+        get => "/" + Navmgr.ToBaseRelativePath(Navmgr.Uri);
+        set => Navmgr.NavigateTo(value.StartsWith("/") ? value[1..] : value);
+    }
+
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue(nameof(RouteData), out RouteData? routeData))
+        {
+            var reuseTabsPageItem = _pageMap.ContainsKey(CurrentUrl) ? _pageMap[CurrentUrl] : null;
+            if (reuseTabsPageItem == null)
+            {
+                reuseTabsPageItem = new ReuseTabsPageItem
+                    {
+                        Url = CurrentUrl,
+                        CreatedAt = DateTime.Now,
+                        Ignore = false
+                    };
+
+                _pageMap[CurrentUrl] = reuseTabsPageItem;
+                tabsIndex = Pages.Length - 1;
+                stateHasChanged = true;
+            }
+
+
+            if (routeData != null)
+            {
+                GetPageInfo(reuseTabsPageItem, routeData.PageType, CurrentUrl);
+                reuseTabsPageItem.Body ??= CreateBody(routeData, reuseTabsPageItem, tabs);
+                tabsIndex = Array.IndexOf(Pages, Pages.FirstOrDefault(s => Equals(s.Url, CurrentUrl)));
+                stateHasChanged = true;
+            }
+
+
+        }
+
+        return base.SetParametersAsync(parameters);
+    }
+
+    private static RenderFragment CreateBody(RouteData routeData, ReuseTabsPageItem item, MudTabs? tabs)
+    {
+        return builder =>
+        {
+            builder.OpenComponent(0, routeData.PageType);
+            foreach (var routeValue in routeData.RouteValues)
+            {
+                builder.AddAttribute(1, routeValue.Key, routeValue.Value);
+            }
+
+            builder.CloseComponent();
+
+            // tabs?.ActivatePanel(item.Url);
+        };
+    }
+
+    private static void GetPageInfo(ReuseTabsPageItem pageItem, Type pageType, string url)
+    {
+
+        var attributes = pageType.GetCustomAttributes(true);
+
+        if (attributes.FirstOrDefault(x => x is ReuseTabsPageTitleAttribute) is ReuseTabsPageTitleAttribute titleAttr && titleAttr != null)
+        {
+            pageItem.Title = titleAttr.Title;
+        }
+
+        if (attributes.FirstOrDefault(x => x is ReuseTabsPageAttribute) is ReuseTabsPageAttribute attr && attr != null)
+        {
+            pageItem.Title = attr.Title;
+            pageItem.Ignore = attr.Ignore;
+            pageItem.Closable = attr.Closable;
+            pageItem.Pin = attr.Pin;
+        }
+
+        pageItem.Title ??= url;
+    }
+
+}

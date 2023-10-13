@@ -1,38 +1,11 @@
 ﻿@using CQ.GS.Client.Components.Layout
+@using CQ.GS.Client.Components.Reuse
 @using CQ.GS.Client.Services;
 @inherits LayoutComponentBase
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-
-@*<MudLayout>
-    <MudAppBar Color="Color.Success" Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                       OnClick="@(e => DrawerToggle())" />
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen" Elevation="4" Color="Color.Primary" Width="@_navMenuWidth">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">My App</MudText>
-        </MudDrawerHeader>
-        <NavMenu></NavMenu>
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>*@
-
-@*<MudDrawerContainer Class="mud-height-full">
-    <MudDrawer @bind-Open="@_drawerOpen" Fixed="false" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
-        <MudNavMenu>
-            <MudNavGroup Title="路由" Icon="@Icons.Material.Filled.Router">
-                <MudNavLink Href="/user/12345" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">User 携带参数</MudNavLink>
-            </MudNavGroup>
-        </MudNavMenu>
-    </MudDrawer>
-</MudDrawerContainer>*@
 
 
 <MudLayout>
@@ -46,21 +19,12 @@
         <MudNavMenu>
             <MudNavGroup Title="路由" Icon="@Icons.Material.Filled.Router">
                 <MudNavLink Href="/user" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">用户管理</MudNavLink>
+                <MudNavLink Href="/role" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">角色管理</MudNavLink>
             </MudNavGroup>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
-            <MudTabPanel>
-                <ChildContent>
-                    @Body
-                </ChildContent>
-                <TabContent>
-                    首页
-                </TabContent>
-            </MudTabPanel>
-    
-        </MudTabs>
+        <ReuseTabs></ReuseTabs>
     </MudMainContent>
 </MudLayout>
 
