@@ -4,12 +4,18 @@
 @inherits LayoutComponentBase
 
 <MudThemeProvider />
-<MudDialogProvider />
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.ExtraSmall"
+                   CloseButton="true"
+                   DisableBackdropClick="true"
+                   NoHeader="false"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true" />
 <MudSnackbarProvider />
 
 
 <MudLayout>
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
         <MudSpacer />

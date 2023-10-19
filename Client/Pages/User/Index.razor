@@ -6,44 +6,58 @@
 @using CQ.GS.Shared;
 
 @inject UserService UserService;
+@inject NavigationManager NavMgr;
+@inject IDialogService DialogService;
 
 
 <MudContainer MaxWidth="MaxWidth.False">
-    <MudTable @ref="table" Items="users" Hover="true">
-        <ToolBarContent>
-            <MudText Typo="Typo.h5">用户列表</MudText>
-            <MudSpacer />
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh Style="width:200px;">
-                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Name)">
-                    姓名
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>性别</MudTh>
-            <MudTh Style="width:200px;">操作</MudTh>
-
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Gender">@context.Gender</MudTd>
-            <MudTd DataLabel="Action">
-                <MudStack Row="true">
-                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">编辑</MudButton>
-                </MudStack>
-            </MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager RowsPerPageString="每页显示条目" InfoFormat="当前页 {first_item} / {last_item}"></MudTablePager>
-        </PagerContent>
-    </MudTable>
+    <MudPaper Class="mt-3">
+        <MudDataGrid T="User" Items="users" Striped="true" Filterable="true" FilterMode="DataGridFilterMode.ColumnFilterMenu">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">用户管理</MudText>
+                <MudSpacer />
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">新增</MudButton>
+            </ToolBarContent>
+            <Columns>
+                <PropertyColumn Property="x => x.Name" Title="姓名" />
+                <PropertyColumn Property="x => x.Gender" Title="性别">
+                    <FilterTemplate>
+                        <MudSelect T="string" Label="选择性别" AnchorOrigin="Origin.BottomCenter" MultiSelection>
+                            <MudSelectItem T="string" Value="Nan" />
+                            <MudSelectItem T="string" Value="Nv" />
+                        </MudSelect>
+                    </FilterTemplate>
+                </PropertyColumn>
+                <TemplateColumn CellClass="d-flex justify-end" Filterable="false" Sortable="false">
+                    <CellTemplate>
+                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@(() => OpenDialog(context.Item))" />
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="User" RowsPerPageString="每页显示条目" InfoFormat="当前页 {first_item} / {last_item}" />
+            </PagerContent>
+        </MudDataGrid>
+    </MudPaper>
 </MudContainer>
+
 
 @code {
     private MudTable<User>? table;
     private IEnumerable<User> users = new List<User>();
 
-  
+
+    private const string Nan = "男";
+    private const string Nv = "女";
+
+    public class UserSearchModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Gender { get; set; } = string.Empty;
+    }
+
+    private UserSearchModel searchModel = new UserSearchModel();
+
     protected override async Task OnInitializedAsync()
     {
         await InitUsers();
@@ -71,4 +85,18 @@
             users = result;
         }
     }
+
+    private void Edit(User item)
+    {
+        NavMgr.NavigateTo(string.Format("/user/edit/{0}", item.Name));
+    }
+
+    private void OpenDialog(User item)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("User", item);
+
+        DialogService.Show<EditDialog>($"编辑 - {item.Name}", parameters);
+    }
+
 }

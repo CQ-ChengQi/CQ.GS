@@ -1,4 +1,4 @@
-﻿namespace CQ.GS.Client.Components
+﻿namespace CQ.GS.Client
 {
     public class ReuseTabsPageAttribute : Attribute
     {

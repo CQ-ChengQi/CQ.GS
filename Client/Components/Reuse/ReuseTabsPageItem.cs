@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace CQ.GS.Client.Components
+namespace CQ.GS.Client
 {
     public class ReuseTabsPageItem
     {
@@ -10,7 +10,7 @@ namespace CQ.GS.Client.Components
 
         public string Title { get; set; } = string.Empty;
 
-        public RenderFragment Body { get; set; }
+        public RenderFragment? Body { get; set; }
 
         public bool Ignore { get; set; }
 

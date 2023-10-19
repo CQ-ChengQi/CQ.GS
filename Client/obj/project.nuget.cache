@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sTs5Mot066jsi+U/y9Q9pD4F2E/u6x8Mb+d4f4mcetKjvTZeUgRglIEmD2lMs/SCTF9YbfFmzfRAYljoJjCPmg==",
+  "dgSpecHash": "qp7TKbbWHJ+X3SIO+lTlP3UTtLH4MlB6HYvgCMqkkU7q5fy2EzSB4nDlszSIfxkZ65cLe/gfYRDIKw/+DoTQ4A==",
   "success": true,
   "projectFilePath": "D:\\Git\\ChengQi\\CQ.GS\\Client\\CQ.GS.Client.csproj",
   "expectedPackageFiles": [
@@ -30,14 +30,21 @@
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\microsoft.jsinterop\\7.0.11\\microsoft.jsinterop.7.0.11.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\microsoft.jsinterop.webassembly\\7.0.11\\microsoft.jsinterop.webassembly.7.0.11.nupkg.sha512",
-    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\mudblazor\\6.10.0\\mudblazor.6.10.0.nupkg.sha512",
+    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\mudblazor\\6.11.0\\mudblazor.6.11.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\svgpathproperties\\1.1.2\\svgpathproperties.1.1.2.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\system.io.pipelines\\7.0.0\\system.io.pipelines.7.0.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\z.blazor.diagrams\\3.0.0\\z.blazor.diagrams.3.0.0.nupkg.sha512",
     "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\z.blazor.diagrams.core\\3.0.0\\z.blazor.diagrams.core.3.0.0.nupkg.sha512",
-    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.3\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.3.nupkg.sha512"
+    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.12\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.12.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "正在通过 “HTTP” 源“http://azuredev/DefaultCollection/_packaging/OnlyEdu/nuget/v3/index.json”运行“restore”操作。将来的版本中将删除非 HTTPS 访问权限。请考虑迁移到 “HTTPS” 源。"
+    }
+  ]
 }

@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "3iRe4XPBSTqY6SjWB/6hzIFGvV2bSKsFy4u9nOd0LYdbu+YH291oruLOz+u+hyjx+B4hX6enYqRYKoDDJ6Pi5A==",
+  "dgSpecHash": "UsKsFD7ejNKCQ1t8BI3NxURXyFoYASgnulF7z54x4qCipKu4sppHtnTArQXqbVPjSXEDp+HDtyAH6rsKQm0mBg==",
   "success": true,
   "projectFilePath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "正在通过 “HTTP” 源“http://azuredev/DefaultCollection/_packaging/OnlyEdu/nuget/v3/index.json”运行“restore”操作。将来的版本中将删除非 HTTPS 访问权限。请考虑迁移到 “HTTPS” 源。"
+    }
+  ]
 }
