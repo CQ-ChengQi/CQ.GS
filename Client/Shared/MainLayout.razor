@@ -3,6 +3,7 @@
 @using CQ.GS.Client.Services;
 @inherits LayoutComponentBase
 
+
 <MudThemeProvider />
 <MudDialogProvider FullWidth="true"
                    MaxWidth="MaxWidth.ExtraSmall"
@@ -22,6 +23,8 @@
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+
+
         <MudNavMenu>
             <MudNavGroup Title="路由" Icon="@Icons.Material.Filled.Router">
                 <MudNavLink Href="/user" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">用户管理</MudNavLink>
@@ -30,7 +33,21 @@
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <ReuseTabs></ReuseTabs>
+        @*      <ReuseTabs></ReuseTabs> *@
+
+        <MudCard Square="true" Elevation="0">
+            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+            <MudContainer MaxWidth="MaxWidth.False" Class="pb-4">
+                <MudStack>
+                    <MudText Typo="Typo.h5">用户管理</MudText>
+                    <MudText Typo="Typo.body1">表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。</MudText>
+                </MudStack>
+
+            </MudContainer>
+        </MudCard>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pt-6 pb-2">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 
@@ -45,6 +62,12 @@
     [Inject]
     private AppSettings? _appSettings { get; set; }
 
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("首页", href: "#", icon:Icons.Material.Filled.Home),
+        new BreadcrumbItem("用户管理", href: null, disabled: true)
+    };
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -54,10 +77,7 @@
             _navMenuWidth = _appSettings.NavMenuWidth;
             _appBarHeight = _appSettings.AppBarHeight;
         }
-
-
     }
-
 
     void DrawerToggle()
     {

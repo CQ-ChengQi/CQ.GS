@@ -4,9 +4,10 @@
     {
         public User() { }
 
-        public User(string name)
+        public User(string name, string gender)
         {
             Name = name;
+            Gender = gender;
         }
 
         /// <summary>
@@ -17,6 +18,6 @@
         /// <summary>
         /// 获取或设置 性别 。
         /// </summary>
-        public string Gender { get; set; } = "男";
+        public string Gender { get; set; } = string.Empty;
     }
 }

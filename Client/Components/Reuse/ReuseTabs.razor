@@ -1,23 +1,28 @@
 ﻿@using System.Reflection;
 @inject NavigationManager Navmgr;
 
-<MudDynamicTabs Elevation="1" Rounded="false" PanelClass="pt-4" @bind-ActivePanelIndex="@tabsIndex" CloseTab="CloseTabCallback" Style="background-color:#efefef; height:calc(100vh - 66px);">
-    @foreach (var item in Pages)
-    {
-        <MudTabPanel ID="@item.Url" Text="@item.Title" ShowCloseIcon="@item.Closable">
-            <ChildContent>
-                @if (Body != null)
-                {
-                    @Body(item)
-                }
-                else
-                {
-                    @item.Body
-                }
-            </ChildContent>
-        </MudTabPanel>
-    }
-</MudDynamicTabs>
+
+<div class="main-body">
+
+    <MudDynamicTabs Elevation="1" Rounded="false" @bind-ActivePanelIndex="@tabsIndex" CloseTab="CloseTabCallback" Class="main-body">
+        @foreach (var item in Pages)
+        {
+            <MudTabPanel ID="@item.Url" Text="@item.Title" ShowCloseIcon="@item.Closable">
+                <ChildContent>
+                    @if (Body != null)
+                    {
+                        @Body(item)
+                    }
+                    else
+                    {
+                        @item.Body
+                    }
+                </ChildContent>
+            </MudTabPanel>
+        }
+    </MudDynamicTabs>
+
+</div>
 
 @code {
 

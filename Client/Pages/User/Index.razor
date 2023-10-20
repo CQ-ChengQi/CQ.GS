@@ -10,41 +10,93 @@
 @inject IDialogService DialogService;
 
 
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudPaper Class="mt-3">
-        <MudDataGrid T="User" Items="users" Striped="true" Filterable="true" FilterMode="DataGridFilterMode.ColumnFilterMenu">
-            <ToolBarContent>
-                <MudText Typo="Typo.h6">用户管理</MudText>
-                <MudSpacer />
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">新增</MudButton>
-            </ToolBarContent>
-            <Columns>
-                <PropertyColumn Property="x => x.Name" Title="姓名" />
-                <PropertyColumn Property="x => x.Gender" Title="性别">
-                    <FilterTemplate>
-                        <MudSelect T="string" Label="选择性别" AnchorOrigin="Origin.BottomCenter" MultiSelection>
-                            <MudSelectItem T="string" Value="Nan" />
-                            <MudSelectItem T="string" Value="Nv" />
-                        </MudSelect>
-                    </FilterTemplate>
-                </PropertyColumn>
-                <TemplateColumn CellClass="d-flex justify-end" Filterable="false" Sortable="false">
-                    <CellTemplate>
-                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@(() => OpenDialog(context.Item))" />
-                    </CellTemplate>
-                </TemplateColumn>
-            </Columns>
-            <PagerContent>
-                <MudDataGridPager T="User" RowsPerPageString="每页显示条目" InfoFormat="当前页 {first_item} / {last_item}" />
-            </PagerContent>
-        </MudDataGrid>
-    </MudPaper>
-</MudContainer>
 
 
-@code {
-    private MudTable<User>? table;
+
+
+<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">查询</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="4">
+                <MudTextField Label="姓名" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudTextField Label="性别" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudTextField Label="年龄" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+
+    <MudCardActions Class="d-flex justify-end">
+        <MudButton Variant="Variant.Text" Color="Color.Primary">重置</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">查询</MudButton>
+    </MudCardActions>
+</MudCard>
+
+<MudCard Class="mt-6 mb-6" Elevation="0">
+    <MudTable @ref="table" Items="users" Hover="true" SortLabel="Sort By" RowsPerPage="10" Virtualize="true" FixedHeader="true" FixedFooter="true" Height="700px" Elevation="0">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">查询列表</MudText>
+            <MudSpacer />
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info">新增</MudButton>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Name)">名称</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Gender)">性别</MudTableSortLabel>
+            </MudTh>
+            <MudTh Style="width:200px; font-weight:700; text-align:center;">
+                操作
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Gender">@context.Gender</MudTd>
+            <MudTd Style="text-align:center;">
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info" OnClick="(e) => Edit(context)">编辑</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudGrid Class="pa-4">
+                <MudItem xl="4" Class="d-flex align-center">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                         <MudSelect T="string" Label="@($"总条目 {table.GetFilteredItemsCount()} / 页尺寸")" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined">
+                             <MudSelectItem Value="@("10")" />
+                             <MudSelectItem Value="@("20")" />
+                             <MudSelectItem Value="@("50")" />
+                         </MudSelect>
+                     </MudStack>
+                 </MudItem>
+                 <MudItem xl="8" Class="d-flex align-center">
+                     <MudPagination Class="ml-auto" SelectedChanged="PageSelected" Count="@((table.GetFilteredItemsCount() + table.RowsPerPage - 1) / table.RowsPerPage)" />
+                 </MudItem>
+             </MudGrid>
+         </PagerContent>
+     </MudTable>
+ </MudCard>
+
+
+
+ @code {
+    private MudTable<User> table;
     private IEnumerable<User> users = new List<User>();
+    private int _selected;
+
+
 
 
     private const string Nan = "男";
@@ -64,13 +116,10 @@
     }
 
 
-    /// <summary>
-    /// 分页 。
-    /// </summary>
-    /// <param name="i"></param>
-    private void PageChanged(int i)
+    private void PageSelected(int newPage)
     {
-        table?.NavigateTo(i);
+
+        table.NavigateTo(newPage - 1);
     }
 
     /// <summary>
@@ -79,7 +128,7 @@
     /// <returns></returns>
     private async Task InitUsers()
     {
-        var result = await UserService.GetUsers();
+        var result = await UserService.GetUsers(new UserSearchModel());
         if (result != null)
         {
             users = result;
