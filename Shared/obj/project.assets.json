@@ -8,33 +8,24 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/chengqi/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj",
+      "projectUniqueName": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj",
       "projectName": "CQ.GS.Shared",
-      "projectPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\CQ.GS.Shared.csproj",
-      "packagesPath": "C:\\Users\\chengqi.ONLYEDUGROUP\\.nuget\\packages\\",
-      "outputPath": "D:\\Git\\ChengQi\\CQ.GS\\Shared\\obj\\",
+      "projectPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/CQ.GS.Shared.csproj",
+      "packagesPath": "/Users/chengqi/.nuget/packages/",
+      "outputPath": "/Users/chengqi/Documents/Workspace/Git/ChengQi/CQ.GS/Shared/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\chengqi.ONLYEDUGROUP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/chengqi/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
-        "http://azuredev/DefaultCollection/_packaging/OnlyEdu/nuget/v3/index.json": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -68,16 +59,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1803",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "正在通过 “HTTP” 源“http://azuredev/DefaultCollection/_packaging/OnlyEdu/nuget/v3/index.json”运行“restore”操作。将来的版本中将删除非 HTTPS 访问权限。请考虑迁移到 “HTTPS” 源。"
-    }
-  ]
+  }
 }
