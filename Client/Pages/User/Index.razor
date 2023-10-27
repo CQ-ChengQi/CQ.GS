@@ -1,17 +1,14 @@
 ﻿@page "/user"
+@using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Dtos.Filter;
+@using CQ.GS.Shared.Dtos.Output;
+@using CQ.GS.Shared.Models;
 @attribute [ReuseTabsPageTitle("用户列表")]
 
-@using CQ.GS.Client.Components;
-@using CQ.GS.Client.Services;
-@using CQ.GS.Shared;
 
 @inject UserService UserService;
 @inject NavigationManager NavMgr;
 @inject IDialogService DialogService;
-
-
-
-
 
 
 <MudCard Elevation="0">
@@ -27,13 +24,13 @@
     <MudCardContent>
         <MudGrid>
             <MudItem xs="4">
-                <MudTextField Label="姓名" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+                <MudTextField Label="姓名" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
             </MudItem>
             <MudItem xs="4">
-                <MudTextField Label="性别" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+                <MudTextField Label="性别" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
             </MudItem>
             <MudItem xs="4">
-                <MudTextField Label="年龄" Variant="Variant.Text" @bind-Value="searchModel.Name" />
+                <MudTextField Label="年龄" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
             </MudItem>
         </MudGrid>
     </MudCardContent>
@@ -45,7 +42,7 @@
 </MudCard>
 
 <MudCard Class="mt-6 mb-6" Elevation="0">
-    <MudTable @ref="table" Items="users" Hover="true" SortLabel="Sort By" RowsPerPage="10" Virtualize="true" FixedHeader="true" FixedFooter="true" Height="700px" Elevation="0">
+    <MudTable @ref="_table" Items="_users" Hover="true" SortLabel="Sort By" RowsPerPage="10" Virtualize="true" FixedHeader="true" FixedFooter="true" Height="700px" Elevation="0">
         <ToolBarContent>
             <MudText Typo="Typo.h6">查询列表</MudText>
             <MudSpacer />
@@ -54,27 +51,37 @@
 
         <HeaderContent>
             <MudTh>
-                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Name)">名称</MudTableSortLabel>
+                <MudTableSortLabel SortBy="new Func<UserInfoOutput, object>(x => x.UserName)">用户名</MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy="new Func<User, object>(x => x.Gender)">性别</MudTableSortLabel>
+                <MudTableSortLabel SortBy="new Func<UserInfoOutput, object>(x => x.Name)">名称</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<UserInfoOutput, object>(x => x.Gender)">性别</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<UserInfoOutput, object>(x => x.Email)">邮箱</MudTableSortLabel>
             </MudTh>
             <MudTh Style="width:200px; font-weight:700; text-align:center;">
                 操作
             </MudTh>
         </HeaderContent>
+
         <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Gender">@context.Gender</MudTd>
+            <MudTd DataLabel="Name">@context.UserName</MudTd>
+            <MudTd DataLabel="Gender">@context.Name</MudTd>
+            <MudTd DataLabel="Name">@context.Gender</MudTd>
+            <MudTd DataLabel="Gender">@context.Email</MudTd>
             <MudTd Style="text-align:center;">
                 <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info" OnClick="(e) => Edit(context)">编辑</MudButton>
             </MudTd>
         </RowTemplate>
+
         <PagerContent>
             <MudGrid Class="pa-4">
                 <MudItem xl="4" Class="d-flex align-center">
                     <MudStack Row AlignItems="AlignItems.Center">
-                         <MudSelect T="string" Label="@($"总条目 {table.GetFilteredItemsCount()} / 页尺寸")" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined">
+                         <MudSelect T="string" Label="@($"总条目 {_total} / 页尺寸")" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined">
                              <MudSelectItem Value="@("10")" />
                              <MudSelectItem Value="@("20")" />
                              <MudSelectItem Value="@("50")" />
@@ -82,7 +89,7 @@
                      </MudStack>
                  </MudItem>
                  <MudItem xl="8" Class="d-flex align-center">
-                     <MudPagination Class="ml-auto" SelectedChanged="PageSelected" Count="@((table.GetFilteredItemsCount() + table.RowsPerPage - 1) / table.RowsPerPage)" />
+                     <MudPagination Class="ml-auto" SelectedChanged="PageSelected" Count="@((_total + _pageSize - 1) / _pageSize)" />
                  </MudItem>
              </MudGrid>
          </PagerContent>
@@ -92,34 +99,42 @@
 
 
  @code {
-    private MudTable<User> table;
-    private IEnumerable<User> users = new List<User>();
-    private int _selected;
+    private MudTable<UserInfoOutput>? _table;
+    private int _total;
+    private int _pageSize;
+    private IList<UserInfoOutput>? _users;
+    private UserInfoFilter _userInfoFilter;
 
-
-
-
-    private const string Nan = "男";
-    private const string Nv = "女";
-
-    public class UserSearchModel
+    public Index()
     {
-        public string Name { get; set; } = string.Empty;
-        public string Gender { get; set; } = string.Empty;
+        _userInfoFilter = new UserInfoFilter();
     }
-
-    private UserSearchModel searchModel = new UserSearchModel();
 
     protected override async Task OnInitializedAsync()
     {
         await InitUsers();
     }
 
+    /// <summary>
+    /// 刷新页尺寸与总条目数。
+    /// </summary>
+    private void RefreshPageInfo()
+    {
+        if (_table == null)
+            return;
 
+        _total = _table.GetFilteredItemsCount();
+        _pageSize = _table.RowsPerPage;
+    }
+
+
+    /// <summary>
+    /// 页码跳转 。
+    /// </summary>
+    /// <param name="newPage">选中页码</param>
     private void PageSelected(int newPage)
     {
-
-        table.NavigateTo(newPage - 1);
+        _table?.NavigateTo(newPage - 1);
     }
 
     /// <summary>
@@ -128,19 +143,19 @@
     /// <returns></returns>
     private async Task InitUsers()
     {
-        var result = await UserService.GetUsers(new UserSearchModel());
+        var result = await UserService.GetUsers(_userInfoFilter);
         if (result != null)
         {
-            users = result;
+            _users = result.Data;
         }
     }
 
-    private void Edit(User item)
+    private void Edit(UserInfoOutput item)
     {
         NavMgr.NavigateTo(string.Format("/user/edit/{0}", item.Name));
     }
 
-    private void OpenDialog(User item)
+    private void OpenDialog(UserInfoOutput item)
     {
         var parameters = new DialogParameters();
         parameters.Add("User", item);

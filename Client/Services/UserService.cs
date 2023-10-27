@@ -1,6 +1,7 @@
 ﻿using CQ.GS.Shared;
+using CQ.GS.Shared.Dtos.Filter;
+using CQ.GS.Shared.Dtos.Output;
 using System.Net.Http.Json;
-using static CQ.GS.Client.Pages.User.Index;
 
 namespace CQ.GS.Client.Services
 {
@@ -21,9 +22,10 @@ namespace CQ.GS.Client.Services
         /// 获取用户列表 。
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<User>?> GetUsers(UserSearchModel query)
+        public async Task<ApiResult<List<UserInfoOutput>>?> GetUsers(UserInfoFilter query)
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<User>>($"api/User?{query.Name}");
+            return await _httpClient
+                .GetFromJsonAsync<ApiResult<List<UserInfoOutput>>>($"api/User?{query.UserName}");
         }
     }
 }

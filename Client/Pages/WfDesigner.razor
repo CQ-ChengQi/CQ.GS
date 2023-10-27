@@ -29,39 +29,23 @@
             </MudPaper>
         </MudItem>
         <MudItem md="3" xs="12">
-            <MudDropContainer T="DropItem" Items="_items"
-                ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)" ItemDropped="ItemUpdated"
-                Class="d-flex flex-wrap flex-grow-1">
-                <ChildContent>
-                    <MudDropZone T="DropItem" Identifier="Drop Zone 1"
-                        Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
-                        <MudText Typo="Typo.h6" Class="mb-4">Drop Zone 1</MudText>
-                    </MudDropZone>
-                    <MudDropZone T="DropItem" Identifier="Drop Zone 2"
-                        Class="rounded mud-background-gray pa-6 ma-8 flex-grow-1">
-                        <MudText Typo="Typo.h6" Class="mb-4">Drop Zone 2</MudText>
-                    </MudDropZone>
-                </ChildContent>
-                <ItemRenderer>
-                    <MudPaper Elevation="25" Class="pa-4 my-4">@context.Name</MudPaper>
-                    </ItemRenderer>
-                </MudDropContainer>
-            </MudItem>
-            <MudItem md="9" xs="12">
-                <MudPaper Height="calc(100vh - 96px)" Square="true" Class="ma-4" Elevation="4">
-                    <CascadingValue Value="diagram">
-                        <DiagramCanvas></DiagramCanvas>
-                    </CascadingValue>
-                </MudPaper>
-            </MudItem>
-        </MudGrid>
+           
+        </MudItem>
+        <MudItem md="9" xs="12">
+            <MudPaper Height="calc(100vh - 96px)" Square="true" Class="ma-4" Elevation="4">
+                <CascadingValue Value="diagram">
+                    <DiagramCanvas></DiagramCanvas>
+                </CascadingValue>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 
-    </MudCard>
+</MudCard>
 
 
 
 
-    @code {
+@code {
 
     [Inject]
     private AppSettings? _appSettings { get; set; }

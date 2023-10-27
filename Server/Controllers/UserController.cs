@@ -1,4 +1,7 @@
-﻿using CQ.GS.Shared;
+﻿using AutoMapper;
+using CQ.GS.Shared.Dtos.Output;
+using CQ.GS.Shared.EnumModel;
+using CQ.GS.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -8,25 +11,33 @@ namespace CQ.GS.Server.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly List<User> _list = new List<User>();
+        private readonly List<UserInfo> _list = new List<UserInfo>();
+        private readonly IMapper _mapper;
 
 
-        public UserController()
+        public UserController(IMapper mapper)
         {
+            _mapper = mapper;
+
             var nameGenerator = new ChineseNameGenerator();
-           
+
             for (int i = 0; i < 1000; i++)
             {
                 var tupe = nameGenerator.GenerateRandomChineseNameWithGender();
-                _list.Add(new Shared.User(tupe.Item1, tupe.Item2));
+
+                _list.Add(new UserInfo
+                {
+                    Name = tupe.Item1,
+                    Gender = tupe.Item2,
+                });
             }
         }
 
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<UserInfoOutput> Get()
         {
-            return _list;
+            return _mapper.Map<IEnumerable<UserInfoOutput>>(_list);
         }
     }
 
@@ -34,10 +45,10 @@ namespace CQ.GS.Server.Controllers
     {
         private static string[] FirstNames = { "张", "王", "李", "赵", "刘", "陈", "杨", "黄", "吴", "马" };
         private static string[] LastNames = { "小", "明", "伟", "静", "丽", "华", "强", "磊", "红", "敏" };
-        private static string[] Genders = { "男", "女" };
+        private static Gender[] Genders = { Gender.Man, Gender.Girl };
         private Random random = new Random();
 
-        public Tuple<string, string> GenerateRandomChineseNameWithGender()
+        public Tuple<string, Gender> GenerateRandomChineseNameWithGender()
         {
             string firstName = FirstNames[random.Next(FirstNames.Length)];
             string lastName = LastNames[random.Next(LastNames.Length)];
@@ -51,8 +62,8 @@ namespace CQ.GS.Server.Controllers
                 middleName.Append(c);
             }
 
-            string gender = Genders[random.Next(Genders.Length)];
-            return new Tuple<string, string>($"{firstName}{middleName}{lastName}", gender);
+            Gender gender = Genders[random.Next(Genders.Length)];
+            return new Tuple<string, Gender>($"{firstName}{middleName}{lastName}", gender);
         }
     }
 }
