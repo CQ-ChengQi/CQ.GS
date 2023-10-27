@@ -2,11 +2,9 @@
 
 namespace CQ.GS.Shared
 {
-    public class ApiResult<T>
-        where T : class, new()
-    {
 
-        public ApiResult() { }
+    public abstract class ApiResultBase
+    {
 
         /// <summary>
         /// 获取或设置 返回状态码。
@@ -18,10 +16,23 @@ namespace CQ.GS.Shared
         /// </summary>
         public string? Message { get; set; }
 
+    }
+
+    public class ApiResult<T> : ApiResultBase
+        where T : class, new()
+    {
 
         /// <summary>
         /// 获取或设置 数据。
         /// </summary>
         public T? Data { get; set; }
+    }
+
+    public class ApiResultList<T> : ApiResultBase
+    {
+        /// <summary>
+        /// 获取或设置 数据。
+        /// </summary>
+        public IList<T> Data { get; set; } = new List<T>();
     }
 }

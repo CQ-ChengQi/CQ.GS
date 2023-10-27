@@ -1,8 +1,11 @@
 ﻿@using CQ.GS.Client.Components.Layout
 @using CQ.GS.Client.Components.Reuse
 @using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Utils.Attributes;
+
 @inherits LayoutComponentBase
 
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider />
 <MudDialogProvider FullWidth="true"
@@ -30,6 +33,7 @@
                 <MudNavLink Href="/user" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">用户管理</MudNavLink>
                 <MudNavLink Href="/role" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">角色管理</MudNavLink>
                 <MudNavLink Href="/wf-designer" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">流程设置</MudNavLink>
+                <MudNavLink Href="/form-designer" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group">表单设计</MudNavLink>
             </MudNavGroup>
         </MudNavMenu>
     </MudDrawer>
@@ -40,8 +44,8 @@
             <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
             <MudContainer MaxWidth="MaxWidth.False" Class="pb-4">
                 <MudStack>
-                    <MudText Typo="Typo.h5">用户管理</MudText>
-                    <MudText Typo="Typo.body1">表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。</MudText>
+                    <MudText Typo="Typo.h5">@_pageTitle</MudText>
+                    <MudText Typo="Typo.body1">@_pageDesc</MudText>
                 </MudStack>
 
             </MudContainer>
@@ -55,10 +59,15 @@
 
 
 @code {
-    bool _drawerOpen = true;
+    private bool _drawerOpen = true;
+    private string _navMenuWidth = "";
+    private string _appBarHeight = "";
+    private string _pageTitle = "";
+    private string _pageDesc = "";
 
-    string _navMenuWidth = "";
-    string _appBarHeight = "";
+    [CascadingParameter]
+    private RouteData? RouteData { get; set; }
+
 
     [Inject]
     private AppSettings? _appSettings { get; set; }
@@ -80,7 +89,32 @@
         }
     }
 
-    void DrawerToggle()
+
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+
+        _pageTitle = string.Empty;
+        _pageDesc = string.Empty;
+
+        if (parameters.TryGetValue(nameof(RouteData), out RouteData? routeData))
+        {
+            if (routeData != null)
+            {
+                var attributes = routeData.PageType.GetCustomAttributes(true);
+                if (attributes.FirstOrDefault(x => x is PageInfoAttribute) is PageInfoAttribute attr && attr != null)
+                {
+                    _pageTitle = attr.Title;
+                    _pageDesc = attr.Desc;
+                }
+            }
+        }
+
+        return base.SetParametersAsync(parameters);
+    }
+
+
+    private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }

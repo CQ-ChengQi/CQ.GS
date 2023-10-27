@@ -9,11 +9,14 @@
 @using CQ.GS.Client.Components.WorkflowDesigner;
 @using CQ.GS.Client.Models.Diagrams;
 @using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Utils.Attributes;
+
+@attribute [PageInfo("流程设计", "对某项任务、项目或业务的步骤和流程进行规划和设计")]
 
 <MudCard Elevation="0">
     <MudGrid Spacing="0">
         <MudItem md="12" xs="12">
-            <MudPaper Elevation="1">
+            <MudCard Elevation="1" Square="true">
                 <MudToolBar>
                     <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-5" />
                     <MudIconButton Icon="@Icons.Material.Outlined.Add" />
@@ -26,13 +29,13 @@
                     <MudIconButton Icon="@Icons.Material.Outlined.PeopleAlt" />
                     <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
                 </MudToolBar>
-            </MudPaper>
+            </MudCard>
         </MudItem>
         <MudItem md="3" xs="12">
            
         </MudItem>
         <MudItem md="9" xs="12">
-            <MudPaper Height="calc(100vh - 96px)" Square="true" Class="ma-4" Elevation="4">
+            <MudPaper Height="calc(100vh - 96px)" Square="true" Class="ma-4" Elevation="1">
                 <CascadingValue Value="diagram">
                     <DiagramCanvas></DiagramCanvas>
                 </CascadingValue>
@@ -62,11 +65,11 @@
     }
 
     private List<DropItem> _items = new()
-{
-new DropItem(){ Name = "Drag me!", Identifier = "Drop Zone 1" },
-new DropItem(){ Name = "Or me!", Identifier = "Drop Zone 2" },
-new DropItem(){ Name = "Just Mud", Identifier = "Drop Zone 1" },
-};
+    {
+        new DropItem(){ Name = "Drag me!", Identifier = "Drop Zone 1" },
+        new DropItem(){ Name = "Or me!", Identifier = "Drop Zone 2" },
+        new DropItem(){ Name = "Just Mud", Identifier = "Drop Zone 1" },
+    };
 
     public class DropItem
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CQ.GS.Shared;
 using CQ.GS.Shared.Dtos.Output;
 using CQ.GS.Shared.EnumModel;
 using CQ.GS.Shared.Models;
@@ -35,9 +36,14 @@ namespace CQ.GS.Server.Controllers
 
 
         [HttpGet]
-        public IEnumerable<UserInfoOutput> Get()
+        public ApiResultList<UserInfoOutput> Get()
         {
-            return _mapper.Map<IEnumerable<UserInfoOutput>>(_list);
+            var list = _mapper.Map<IList<UserInfoOutput>>(_list);
+            return new ApiResultList<UserInfoOutput>
+            {
+                Code = ResultCode.Success,
+                Data = list
+            };
         }
     }
 

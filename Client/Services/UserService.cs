@@ -22,10 +22,10 @@ namespace CQ.GS.Client.Services
         /// 获取用户列表 。
         /// </summary>
         /// <returns></returns>
-        public async Task<ApiResult<List<UserInfoOutput>>?> GetUsers(UserInfoFilter query)
+        public async Task<ApiResultList<UserInfoOutput>?> GetUsers(UserInfoFilter query)
         {
             return await _httpClient
-                .GetFromJsonAsync<ApiResult<List<UserInfoOutput>>>($"api/User?{query.UserName}");
+                .GetFromJsonAsync<ApiResultList<UserInfoOutput>>($"api/User?{query.UserName}");
         }
     }
 }

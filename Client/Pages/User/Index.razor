@@ -3,8 +3,9 @@
 @using CQ.GS.Shared.Dtos.Filter;
 @using CQ.GS.Shared.Dtos.Output;
 @using CQ.GS.Shared.Models;
-@attribute [ReuseTabsPageTitle("用户列表")]
+@using CQ.GS.Shared.Utils.Attributes;
 
+@attribute [PageInfo("用户列表", "用户列表用户列表用户列表")]
 
 @inject UserService UserService;
 @inject NavigationManager NavMgr;
@@ -42,7 +43,7 @@
 </MudCard>
 
 <MudCard Class="mt-6 mb-6" Elevation="0">
-    <MudTable @ref="_table" Items="_users" Hover="true" SortLabel="Sort By" RowsPerPage="10" Virtualize="true" FixedHeader="true" FixedFooter="true" Height="700px" Elevation="0">
+    <MudTable @ref="_table" Items="_users" Hover="true" SortLabel="Sort By" RowsPerPage="@_pageSize" Virtualize="true" FixedHeader="true" FixedFooter="true" Elevation="0">
         <ToolBarContent>
             <MudText Typo="Typo.h6">查询列表</MudText>
             <MudSpacer />
@@ -81,10 +82,10 @@
             <MudGrid Class="pa-4">
                 <MudItem xl="4" Class="d-flex align-center">
                     <MudStack Row AlignItems="AlignItems.Center">
-                         <MudSelect T="string" Label="@($"总条目 {_total} / 页尺寸")" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined">
-                             <MudSelectItem Value="@("10")" />
-                             <MudSelectItem Value="@("20")" />
-                             <MudSelectItem Value="@("50")" />
+                         <MudSelect @bind-Value="_pageSize" T="int" Label="@($"总条目 {_total} / 页尺寸")" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" SelectedValuesChanged="PageSizeSelected">
+                             <MudSelectItem Value="@(10)" />
+                             <MudSelectItem Value="@(20)" />
+                             <MudSelectItem Value="@(50)" />
                          </MudSelect>
                      </MudStack>
                  </MudItem>
@@ -101,13 +102,14 @@
  @code {
     private MudTable<UserInfoOutput>? _table;
     private int _total;
-    private int _pageSize;
-    private IList<UserInfoOutput>? _users;
+    private int _pageSize = 10;
+    private IList<UserInfoOutput> _users;
     private UserInfoFilter _userInfoFilter;
 
     public Index()
     {
         _userInfoFilter = new UserInfoFilter();
+        _users = new List<UserInfoOutput>();
     }
 
     protected override async Task OnInitializedAsync()
@@ -115,16 +117,14 @@
         await InitUsers();
     }
 
-    /// <summary>
-    /// 刷新页尺寸与总条目数。
-    /// </summary>
-    private void RefreshPageInfo()
+    private Task PageSizeSelected(IEnumerable<int> value)
     {
         if (_table == null)
-            return;
+            return Task.CompletedTask;
 
-        _total = _table.GetFilteredItemsCount();
-        _pageSize = _table.RowsPerPage;
+        _pageSize = value.First();
+
+        return Task.CompletedTask;
     }
 
 
@@ -144,9 +144,12 @@
     private async Task InitUsers()
     {
         var result = await UserService.GetUsers(_userInfoFilter);
-        if (result != null)
+        if (result != null && result.Data != null)
         {
             _users = result.Data;
+            _total = result.Data.Count;
+
+            Console.WriteLine(_total);
         }
     }
 
