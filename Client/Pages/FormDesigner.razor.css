@@ -1,0 +1,34 @@
+﻿
+::deep .form-type-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+::deep .form-type-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    ::deep .form-type-item:hover {
+        background-color: #3367d6;
+    }
+
+    ::deep .form-type-item:active {
+        background-color: #2a5da1;
+    }
