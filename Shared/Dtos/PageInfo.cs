@@ -5,6 +5,12 @@
     /// </summary>
     public class PageInfo
     {
+        public PageInfo()
+        {
+            PageSize = 10;
+            PageIndex = 1;
+        }
+
         /// <summary>
         /// 获取或设置 每页显示条数。
         /// </summary>

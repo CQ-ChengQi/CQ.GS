@@ -33,6 +33,11 @@ namespace CQ.GS.Shared
         /// <summary>
         /// 获取或设置 数据。
         /// </summary>
-        public IList<T> Data { get; set; } = new List<T>();
+        public IList<T> Data { get; set; } = Array.Empty<T>();
+
+        /// <summary>
+        /// 获取或设置 总条目。
+        /// </summary>
+        public int Total { get; set; }
     }
 }

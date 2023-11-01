@@ -4,6 +4,7 @@
 @using CQ.GS.Shared.Dtos.Output;
 @using CQ.GS.Shared.Models;
 @using CQ.GS.Shared.Utils.Attributes;
+@using Newtonsoft.Json;
 
 @attribute [PageInfo("用户列表", "用户列表用户列表用户列表")]
 
@@ -90,7 +91,7 @@
                      </MudStack>
                  </MudItem>
                  <MudItem xl="8" Class="d-flex align-center">
-                     <MudPagination Class="ml-auto" SelectedChanged="PageSelected" Count="@((_total + _pageSize - 1) / _pageSize)" />
+                     <MudPagination Class="ml-auto" Selected="_pageIndex" SelectedChanged="GoPage" Count="@((_total + _pageSize - 1) / _pageSize)" />
                  </MudItem>
              </MudGrid>
          </PagerContent>
@@ -102,9 +103,12 @@
  @code {
     private MudTable<UserInfoOutput>? _table;
     private int _total;
+    private int _pageIndex = 1;
     private int _pageSize = 10;
+
     private IList<UserInfoOutput> _users;
     private UserInfoFilter _userInfoFilter;
+
 
     public Index()
     {
@@ -117,14 +121,25 @@
         await InitUsers();
     }
 
-    private Task PageSizeSelected(IEnumerable<int> value)
+    private async Task PageSizeSelected(IEnumerable<int> value)
     {
         if (_table == null)
-            return Task.CompletedTask;
+            return;
 
         _pageSize = value.First();
+        _pageIndex = 1;
 
-        return Task.CompletedTask;
+
+        await InitUsers();
+    }
+
+
+    private async Task GoPage(int value)
+    {
+        _pageIndex = value;
+        _userInfoFilter.PageIndex = value;
+
+        await InitUsers();
     }
 
 
@@ -132,9 +147,13 @@
     /// 页码跳转 。
     /// </summary>
     /// <param name="newPage">选中页码</param>
-    private void PageSelected(int newPage)
+    private async Task PageSelected(int newPage)
     {
-        _table?.NavigateTo(newPage - 1);
+        // _table?.NavigateTo(newPage - 1);
+        _userInfoFilter.PageIndex = newPage;
+        _userInfoFilter.PageSize = _pageSize;
+
+        await InitUsers();
     }
 
     /// <summary>
@@ -147,9 +166,9 @@
         if (result != null && result.Data != null)
         {
             _users = result.Data;
-            _total = result.Data.Count;
+            _total = result.Total;
 
-            Console.WriteLine(_total);
+            Console.WriteLine("Total {0}", _total);
         }
     }
 

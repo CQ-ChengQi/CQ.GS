@@ -11,29 +11,65 @@
                 <div draggable="true"
                      @ondrop="HandleDrop"
                      @ondragstart="HandleStart"
-                     @ondragenter="HandleDragEnter"
-                     @ondragleave="HandleDragLeave"
                      @ondragend="HandleDragEnd"
-                     @ondragover:preventDefault
-                     @ondragenter:preventDefault
-                     @ondrop:preventDefault
-                     @ondrop:stopPropagation
-                     @ondragenter:stopPropagation
-                     @ondragend:stopPropagation
-                     @ondragover:stopPropagation
-                     @ondragleave:stopPropagation
-                     @ondragstart:stopPropagation
+                     class="border-solid pa-6 mud-theme-primary form-type-item">
+                </div>
+                <div draggable="true"
+                     @ondrop="HandleDrop"
+                     @ondragstart="HandleStart"
+                     @ondragend="HandleDragEnd"
+                     class="border-solid pa-6 mud-theme-primary form-type-item">
+                </div>
+                <div draggable="true"
+                     @ondrop="HandleDrop"
+                     @ondragstart="HandleStart"
+                     @ondragend="HandleDragEnd"
                      class="border-solid pa-6 mud-theme-primary form-type-item">
                 </div>
             </div>
         </MudPaper>
         <MudPaper Class="flex-1 d-flex" Elevation="0">
-            <div @ondragenter="HandleDropDesignerEnter" @ondragleave="HandleDropDesignerLeave" @ondragover="HandleDropDesignerOver" style="width:100%;" class="pa-20 mud-theme-success">
-                @foreach (var item in _list)
-                {
-                    <MudButton @ondragenter:stopPropagation @ondragleave:stopPropagation>@item</MudButton>
-                }
-            </div>
+            <MudGrid Class="pa-6">
+                <MudItem md="12">
+
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">xs=12</MudPaper>
+
+                    @*  <div class="from-designer"
+                    @ondragenter="HandleDropDesignerEnter"
+                    @ondragleave="HandleDropDesignerLeave"
+                    @ondragover="HandleDropDesignerOver"
+                    @ondragover:preventDefault
+                    @ondragenter:preventDefault>
+                    <MudField Label="测试" T="string" />
+                    </div> *@
+                </MudItem>
+                <MudItem md="6">
+
+                    <MudCard Elevation="0">
+                        <MudCardContent>
+
+
+                            <MudTextField Label="姓名" Variant="Variant.Text" T="string" />
+
+
+                        </MudCardContent>
+
+                        <MudCardActions Class="d-flex justify-end">
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">查询</MudButton>
+                        </MudCardActions>
+
+                    </MudCard>
+                </MudItem>
+                <MudItem md="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">xs=12</MudPaper>
+                </MudItem>
+                <MudItem md="12">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">xs=12</MudPaper>
+                </MudItem>
+                <MudItem md="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">xs=12</MudPaper>
+                </MudItem>
+            </MudGrid>
         </MudPaper>
         <MudPaper Class="flex-none d-flex py-8  mud-theme-primary" Width="300px" Elevation="0" />
     </div>
@@ -42,6 +78,7 @@
 @code {
     private IList<string> _list = new List<string>();
     private bool _dropDesigner;
+    private bool _isEdit = false;
 
 
     private void HandleDrop()
@@ -67,17 +104,6 @@
 
     }
 
-    private void HandleDragLeave() { }
-
-    private void HandleDragEnter() { }
-
-
-
-    private void HandleDropDesigner()
-    {
-
-
-    }
 
     private void HandleDropDesignerEnter()
     {
@@ -88,7 +114,7 @@
     private void HandleDropDesignerLeave()
     {
         _list.Add("离开");
-
+        _dropDesigner = false;
     }
 
     private void HandleDropDesignerOver()
@@ -99,9 +125,8 @@
         }
     }
 
-    private void HandlerDrop()
+    private void HandlerDrop(DragEventArgs args)
     {
 
-        _list.Add("Drop");
     }
 }
