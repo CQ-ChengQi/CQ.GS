@@ -1,10 +1,16 @@
 ﻿using CQ.GS.Shared.EnumModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CQ.GS.Shared.Models
 {
     public class UserInfo
     {
         public UserInfo() { }
+
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
 
         /// <summary>
         /// 获取或设置 名称 。
@@ -20,5 +26,13 @@ namespace CQ.GS.Shared.Models
 
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime CreatedDate { get; set; }
+
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime UpdatedDate { get; set; }
     }
 }

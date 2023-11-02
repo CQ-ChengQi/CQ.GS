@@ -1,9 +1,10 @@
-using CQ.GS.Server.Services;
-using Microsoft.AspNetCore.ResponseCompression;
+using CQ.GS.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 
 builder.Services.AddControllersWithViews();
@@ -16,11 +17,21 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+var connectionString = "server=1.15.245.36;port=3307;user=root;password=!@#QWE;database=my-db";
+var serverVersion = new MySqlServerVersion(new Version(8, 2));
+
+builder.Services.AddDbContext<MyDbContext>(dbContextOptions => dbContextOptions
+    .UseMySql(connectionString, serverVersion)
+    .LogTo(Console.WriteLine, LogLevel.Information)
+    .EnableSensitiveDataLogging()
+    .EnableDetailedErrors());
+
 // 扩展
 builder.Services.AddAutoMapper(typeof(Program));
 
 // 自定义
-builder.Services.AddSingleton<UserService>();
+
 
 var app = builder.Build();
 
