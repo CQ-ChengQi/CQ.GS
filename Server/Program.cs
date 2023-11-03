@@ -1,9 +1,14 @@
 using CQ.GS.Server.Data;
+using CQ.GS.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region /// 服务注入
+
+builder.Services.AddTransient<IUserInfoService, UserInfoService>();
+
+#endregion
 
 
 
@@ -18,6 +23,8 @@ builder.Services.AddCors(options =>
 });
 
 
+#region /// MySQL 配置
+
 var connectionString = "server=1.15.245.36;port=3307;user=root;password=!@#QWE;database=my-db";
 var serverVersion = new MySqlServerVersion(new Version(8, 2));
 
@@ -27,10 +34,14 @@ builder.Services.AddDbContext<MyDbContext>(dbContextOptions => dbContextOptions
     .EnableSensitiveDataLogging()
     .EnableDetailedErrors());
 
-// 扩展
+#endregion
+
+
+#region /// AutoMapper
+
 builder.Services.AddAutoMapper(typeof(Program));
 
-// 自定义
+#endregion
 
 
 var app = builder.Build();

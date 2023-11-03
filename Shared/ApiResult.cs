@@ -18,6 +18,8 @@ namespace CQ.GS.Shared
 
     }
 
+    public class ApiResult : ApiResultBase { }
+
     public class ApiResult<T> : ApiResultBase
         where T : class, new()
     {

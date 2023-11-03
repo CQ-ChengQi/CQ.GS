@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CQ.GS.Shared.Dtos.Input;
 using CQ.GS.Shared.Dtos.Output;
 using CQ.GS.Shared.Models;
 
@@ -10,6 +11,8 @@ namespace CQ.GS.Server.Profiles
         {
             CreateMap<UserInfo, UserInfoOutput>()
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.GetDisplayName()));
+
+            CreateMap<UserInfo, UserInfoUpdateInput>();
         }
     }
 }

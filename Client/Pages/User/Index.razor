@@ -3,6 +3,7 @@
 @using CQ.GS.Client.Services;
 @using CQ.GS.Shared.Dtos.Filter;
 @using CQ.GS.Shared.Dtos.Output;
+@using CQ.GS.Shared.EnumModel;
 @using CQ.GS.Shared.Models;
 @using CQ.GS.Shared.Utils.Attributes;
 @using Newtonsoft.Json;
@@ -30,17 +31,26 @@
                 <MudTextField Label="姓名" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
             </MudItem>
             <MudItem xs="4">
-                <MudTextField Label="性别" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
+                <MudSelect Label="性别" AnchorOrigin="Origin.BottomCenter" @bind-Value="_userInfoFilter.Gender">
+                    <MudSelectItem Value="Gender.None">请选择</MudSelectItem>
+                    <MudSelectItem Value="Gender.Girl">@Gender.Girl.GetDisplayName()</MudSelectItem>
+                    <MudSelectItem Value="Gender.Man">@Gender.Man.GetDisplayName()</MudSelectItem>
+                    <MudSelectItem Value="Gender.Other">@Gender.Other.GetDisplayName()</MudSelectItem>
+                </MudSelect>
             </MudItem>
             <MudItem xs="4">
-                <MudTextField Label="年龄" Variant="Variant.Text" @bind-Value="_userInfoFilter.UserName" />
+                <MudStack Row>
+                    <MudNumericField Label="年龄-开始" Variant="Variant.Text" @bind-Value="_userInfoFilter.StartAge" />
+                    <MudNumericField Label="年龄-结束" Variant="Variant.Text" @bind-Value="_userInfoFilter.EndAge" />
+                </MudStack>
+
             </MudItem>
         </MudGrid>
     </MudCardContent>
 
     <MudCardActions Class="d-flex justify-end">
-        <MudButton Variant="Variant.Text" Color="Color.Primary">重置</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">查询</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="ResetSearch">重置</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="InitUsers">查询</MudButton>
     </MudCardActions>
 </MudCard>
 
@@ -122,6 +132,11 @@
         await InitUsers();
     }
 
+    private void ResetSearch()
+    {
+        _userInfoFilter = new UserInfoFilter();
+    }
+
     private async Task PageSizeSelected(IEnumerable<int> value)
     {
         if (_table == null)
@@ -175,7 +190,7 @@
 
     private void Edit(UserInfoOutput item)
     {
-        NavMgr.NavigateTo(string.Format("/user/edit/{0}", item.Name));
+        NavMgr.NavigateTo(string.Format("/user/edit/{0}", item.Id));
     }
 
     private void OpenDialog(UserInfoOutput item)

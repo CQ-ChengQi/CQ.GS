@@ -1,5 +1,6 @@
 ﻿using CQ.GS.Shared;
 using CQ.GS.Shared.Dtos.Filter;
+using CQ.GS.Shared.Dtos.Input;
 using CQ.GS.Shared.Dtos.Output;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
@@ -78,6 +79,11 @@ namespace CQ.GS.Client.Services
         public async Task<ApiResultList<UserInfoOutput>?> GetUsers(UserInfoFilter query)
         {
             return await _httpClient.GetFromJsonAsync<ApiResultList<UserInfoOutput>>($"api/user?{ConvertToUrl(query)}");
+        }
+
+        public async Task<ApiResult<UserInfoUpdateInput>?> GetUserById(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<ApiResult<UserInfoUpdateInput>>($"api/user/{id}");
         }
     }
 }

@@ -1,88 +1,77 @@
-﻿using CQ.GS.Server.Data;
+﻿using AutoMapper;
+using CQ.GS.Server.Services;
+using CQ.GS.Shared;
+using CQ.GS.Shared.Dtos.Filter;
+using CQ.GS.Shared.Dtos.Input;
+using CQ.GS.Shared.Dtos.Output;
+using CQ.GS.Shared.EnumModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CQ.GS.Server.Controllers
 {
 
-
-
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly MyDbContext _context;
 
-        public UserController(MyDbContext context)
+        private readonly IMapper _mapper;
+        private readonly IUserInfoService _userInfoService;
+
+
+        public UserController(IMapper mapper, IUserInfoService userInfoService)
         {
-            _context = context;
+            _mapper = mapper;
+            _userInfoService = userInfoService;
         }
 
+        [HttpGet]
+        public Task<ApiResultList<UserInfoOutput>> Get([FromQuery] UserInfoFilter filter)
+        {
+            var list = _userInfoService.GetUserInfoList(filter);
 
+            return Task.FromResult(new ApiResultList<UserInfoOutput>
+            {
+                Code = ResultCode.Success,
+                Data = _mapper.Map<IList<UserInfoOutput>>(list),
+                Total = filter.Total,
+            });
+        }
 
-        //    private readonly IMapper _mapper;
-        //    private readonly UserService _userService;
+        [HttpGet("{id}")]
+        public Task<ApiResult<UserInfoUpdateInput>> Get(int id)
+        {
+            var entity = _userInfoService.GetUserInfoById(id);
 
+            if (entity == null)
+            {
+                return Task.FromResult(new ApiResult<UserInfoUpdateInput>
+                {
+                    Code = ResultCode.Error,
+                    Message = "无数据"
+                });
+            }
 
-        //    public UserController(IMapper mapper, UserService userService)
-        //    {
-        //        _mapper = mapper;
-        //        _userService = userService;
-        //    }
+            return Task.FromResult(new ApiResult<UserInfoUpdateInput>
+            {
+                Code = ResultCode.Success,
+                Data = _mapper.Map<UserInfoUpdateInput>(entity),
+            });
+        }
 
-        //    [HttpGet]
-        //    public Task<ApiResultList<UserInfoOutput>> Get([FromQuery] UserInfoFilter filter)
-        //    {
-        //        var list = _userService.GetUsers();
-        //        var total = list.Count;
+        [HttpPut("{id}")]
+        public Task<ApiResult> Put(int id, [FromBody] UserInfoUpdateInput input)
+        {
+            try
+            {
+                _userInfoService.Update(input);
+                return Task.FromResult(new ApiResult { Code = ResultCode.Success });
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(new ApiResult { Code = ResultCode.Error, Message = ex.Message });
+            }
+        }
 
-        //        list = list.Where(filter.GenderExpression.Compile())
-        //              .Skip(filter.PageSize * (filter.PageIndex - 1))
-        //              .Take(filter.PageSize)
-        //              .ToList();
-
-        //        return Task.FromResult(new ApiResultList<UserInfoOutput>
-        //        {
-        //            Code = ResultCode.Success,
-        //            Data = _mapper.Map<IList<UserInfoOutput>>(list),
-        //            Total = total,
-        //        });
-        //    }
-
-        //    [HttpPost("query")]
-        //    public Task<ApiResultList<UserInfoOutput>> Query(UserInfoFilter filter)
-        //    {
-        //        var list = _userService.GetUsers();
-        //        var total = list.Count;
-
-        //        if (!string.IsNullOrWhiteSpace(filter.Name))
-        //        {
-        //            list = list.Where(s => s.Name.Contains(filter.Name)).ToList();
-        //        }
-
-        //        if (!string.IsNullOrWhiteSpace(filter.UserName))
-        //        {
-        //            list = list.Where(s => s.UserName.Contains(filter.UserName)).ToList();
-        //        }
-
-        //        if (filter.Gender.HasValue)
-        //        {
-        //            list = list.Where(s => s.Gender == filter.Gender.Value).ToList();
-        //        }
-
-        //        list = list
-        //              .Skip(filter.PageSize * (filter.PageIndex - 1))
-        //              .Take(filter.PageSize)
-        //              .ToList();
-
-
-        //        return Task.FromResult(new ApiResultList<UserInfoOutput>
-        //        {
-        //            Code = ResultCode.Success,
-        //            Data = _mapper.Map<IList<UserInfoOutput>>(list),
-        //            Total = total,
-        //        });
-        //    }
     }
-
-
 }

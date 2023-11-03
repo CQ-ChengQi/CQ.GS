@@ -24,10 +24,5 @@
     <ProjectReference Include="..\Shared\CQ.GS.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="Data\Repository\" />
-  </ItemGroup>
-
 
 </Project>

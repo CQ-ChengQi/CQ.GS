@@ -1,30 +1,43 @@
 ﻿@page "/user/edit"
-@page "/user/edit/{id}"
+@page "/user/edit/{Id:int}"
 
 
 @using System.ComponentModel.DataAnnotations;
+@using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Dtos.Input;
+@using CQ.GS.Shared.Dtos.Output;
+@using CQ.GS.Shared.EnumModel;
+@using CQ.GS.Shared.Utils.Attributes;
 
-@attribute [ReuseTabsPageTitle("用户信息编辑")]
+@attribute [PageInfo("用户信息编辑", "编辑编辑")]
 
+@inject UserService UserService;
 
 <MudCard Elevation="0">
     <MudContainer MaxWidth="MaxWidth.Small">
-        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
             <DataAnnotationsValidator />
             <MudCardContent>
-                <MudTextField Label="First name" HelperText="Max. 8 characters"
-                              @bind-Value="model.Username" For="@(() => model.Username)" />
-                <MudTextField Label="Email" Class="mt-3"
-                              @bind-Value="model.Email" For="@(() => model.Email)" />
-                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                              @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
-                              @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password" />
-                <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
-                              @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password" />
+                <MudTextField Label="用户名" HelperText="最大长度为 16 字符"
+                              @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
+
+                <MudTextField Label="姓名" HelperText="最大长度为 16 字符"
+                              @bind-Value="_model.Name" For="@(() => _model.Name)" />
+                <MudTextField Label="电子邮箱" Class="mt-3"
+                              @bind-Value="_model.Email" For="@(() => _model.Email)" />
+
+                <MudSelect Label="性别" AnchorOrigin="Origin.BottomCenter" @bind-Value="_model.Gender" For="(()=>_model.Gender)">
+                    <MudSelectItem Value="Gender.None">请选择</MudSelectItem>
+                    <MudSelectItem Value="Gender.Girl">@Gender.Girl.GetDisplayName()</MudSelectItem>
+                    <MudSelectItem Value="Gender.Man">@Gender.Man.GetDisplayName()</MudSelectItem>
+                    <MudSelectItem Value="Gender.Other">@Gender.Other.GetDisplayName()</MudSelectItem>
+                </MudSelect>
+
+                <MudNumericField Label="年龄" Variant="Variant.Text" @bind-Value="_model.Age" For="(()=>_model.Age)" />
+
             </MudCardContent>
             <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">保存</MudButton>
             </MudCardActions>
         </EditForm>
     </MudContainer>
@@ -34,35 +47,47 @@
 
 @code {
     [Parameter]
-    public string? Id { get; set; }
+    public int Id { get; set; }
 
 
-    RegisterAccountForm model = new RegisterAccountForm();
-    bool success;
 
-    public class RegisterAccountForm
+    private UserInfoUpdateInput _model = new UserInfoUpdateInput();
+
+    protected override async Task OnInitializedAsync()
     {
-        [Required]
-        [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
-        public string Username { get; set; } = string.Empty;
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = string.Empty;
-
-        [Required]
-        [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
-        public string Password { get; set; } = string.Empty;
-
-        [Required]
-        [Compare(nameof(Password))]
-        public string Password2 { get; set; } = string.Empty;
-
+        var result = await UserService.GetUserById(Id);
+        if (result != null && result.Code == ResultCode.Success)
+        {
+            _model = result.Data ?? new UserInfoUpdateInput();
+        }
     }
+
+
+    // RegisterAccountForm model = new RegisterAccountForm();
+    // bool success;
+
+    // public class RegisterAccountForm
+    // {
+    //     [Required]
+    //     [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
+    //     public string Username { get; set; } = string.Empty;
+
+    //     [Required]
+    //     [EmailAddress]
+    //     public string Email { get; set; } = string.Empty;
+
+    //     [Required]
+    //     [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
+    //     public string Password { get; set; } = string.Empty;
+
+    //     [Required]
+    //     [Compare(nameof(Password))]
+    //     public string Password2 { get; set; } = string.Empty;
+
+    // }
 
     private void OnValidSubmit(EditContext context)
     {
-        success = true;
         StateHasChanged();
     }
 }

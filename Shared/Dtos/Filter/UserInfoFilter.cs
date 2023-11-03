@@ -19,7 +19,11 @@ namespace CQ.GS.Shared.Dtos.Filter
         /// <summary>
         /// 获取或设置 性别。
         /// </summary>
-        public Gender? Gender { get; set; }
+        public Gender Gender { get; set; }
+
+        public int StartAge { get; set; }
+
+        public int EndAge { get; set; }
 
 
         public Expression<Func<UserInfo, bool>> GenderExpression
@@ -38,9 +42,19 @@ namespace CQ.GS.Shared.Dtos.Filter
                     filter = filter.And(s => s.Name.Contains(Name));
                 }
 
-                if (Gender != null)
+                if (Gender != Gender.None)
                 {
-                    filter = filter.And(s => s.Gender == Gender.Value);
+                    filter = filter.And(s => s.Gender == Gender);
+                }
+
+                if (StartAge > 0)
+                {
+                    filter = filter.And(s => s.Age >= StartAge);
+                }
+
+                if (EndAge > 0)
+                {
+                    filter = filter.And(s => s.Age <= EndAge);
                 }
 
                 return filter;
