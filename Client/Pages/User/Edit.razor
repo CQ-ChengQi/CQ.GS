@@ -1,5 +1,5 @@
 ﻿@page "/user/edit"
-@page "/user/edit/{Id:int}"
+@page "/user/edit/{Id:long}"
 
 
 @using System.ComponentModel.DataAnnotations;
@@ -8,10 +8,16 @@
 @using CQ.GS.Shared.Dtos.Output;
 @using CQ.GS.Shared.EnumModel;
 @using CQ.GS.Shared.Utils.Attributes;
+@using Newtonsoft.Json;
 
 @attribute [PageInfo("用户信息编辑", "编辑编辑")]
 
-@inject UserService UserService;
+@inject UserService UserService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavMgr
+@inject AppSettings AppSettings
+
+
 
 <MudCard Elevation="0">
     <MudContainer MaxWidth="MaxWidth.Small">
@@ -37,6 +43,7 @@
 
             </MudCardContent>
             <MudCardActions>
+                <MudButton ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="()=>{AppSettings.Loading = !AppSettings.Loading;}">Loading</MudButton>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">保存</MudButton>
             </MudCardActions>
         </EditForm>
@@ -47,11 +54,10 @@
 
 @code {
     [Parameter]
-    public int Id { get; set; }
-
-
+    public long Id { get; set; }
 
     private UserInfoUpdateInput _model = new UserInfoUpdateInput();
+    private bool _isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,32 +68,23 @@
         }
     }
 
-
-    // RegisterAccountForm model = new RegisterAccountForm();
-    // bool success;
-
-    // public class RegisterAccountForm
-    // {
-    //     [Required]
-    //     [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
-    //     public string Username { get; set; } = string.Empty;
-
-    //     [Required]
-    //     [EmailAddress]
-    //     public string Email { get; set; } = string.Empty;
-
-    //     [Required]
-    //     [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
-    //     public string Password { get; set; } = string.Empty;
-
-    //     [Required]
-    //     [Compare(nameof(Password))]
-    //     public string Password2 { get; set; } = string.Empty;
-
-    // }
-
-    private void OnValidSubmit(EditContext context)
+    private async void OnValidSubmit(EditContext context)
     {
+        _isLoading = true;
+
         StateHasChanged();
+
+        var result = await UserService.Save(Id, _model);
+
+        if (!result.IsSuccess)
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+            return;
+        }
+
+        Snackbar.Add(result.Message, Severity.Success);
+        _isLoading = false;
+
+        NavMgr.NavigateTo("/user");
     }
 }

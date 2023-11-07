@@ -41,6 +41,7 @@ namespace CQ.GS.Server.Controllers
         [HttpGet("{id}")]
         public Task<ApiResult<UserInfoUpdateInput>> Get(int id)
         {
+            Thread.Sleep(3000);
             var entity = _userInfoService.GetUserInfoById(id);
 
             if (entity == null)
@@ -60,12 +61,26 @@ namespace CQ.GS.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<ApiResult> Put(int id, [FromBody] UserInfoUpdateInput input)
+        public async Task<ApiResult> Put(long id, [FromBody] UserInfoUpdateInput input)
         {
             try
             {
-                _userInfoService.Update(input);
-                return Task.FromResult(new ApiResult { Code = ResultCode.Success });
+                await _userInfoService.Update(id, input);
+                return new ApiResult { Code = ResultCode.Success, Message = "修改用户信息成功！" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult { Code = ResultCode.Error, Message = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public Task<ApiResult> Add([FromBody] UserInfoAddInput input)
+        {
+            try
+            {
+                _userInfoService.Add(input);
+                return Task.FromResult(new ApiResult { Code = ResultCode.Success, Message = "添加用户信息成功！" });
             }
             catch (Exception ex)
             {

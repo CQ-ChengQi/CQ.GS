@@ -13,6 +13,8 @@ namespace CQ.GS.Server.Profiles
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.GetDisplayName()));
 
             CreateMap<UserInfo, UserInfoUpdateInput>();
+            CreateMap<UserInfoAddInput, UserInfo>();
+            CreateMap<UserInfoUpdateInput, UserInfo>();
         }
     }
 }

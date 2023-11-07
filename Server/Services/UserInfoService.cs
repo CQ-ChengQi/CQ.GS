@@ -3,6 +3,7 @@ using CQ.GS.Server.Data;
 using CQ.GS.Shared.Dtos.Filter;
 using CQ.GS.Shared.Dtos.Input;
 using CQ.GS.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CQ.GS.Server.Services
 {
@@ -37,12 +38,12 @@ namespace CQ.GS.Server.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(UserInfoUpdateInput input)
+        public async Task Update(long id, UserInfoUpdateInput input)
         {
-            var entity = _context.Users.FirstOrDefault(m => m.Id == input.Id);
+            var entity = _context.Users.FirstOrDefault(m => m.Id == id);
             if (entity != null)
             {
-                entity = _mapper.Map<UserInfo>(input);
+                _mapper.Map(input, entity);
                 await _context.SaveChangesAsync();
             }
         }

@@ -12,6 +12,6 @@ namespace CQ.GS.Server.Services
 
         Task Add(UserInfoAddInput input);
 
-        Task Update(UserInfoUpdateInput input);
+        Task Update(long id, UserInfoUpdateInput input);
     }
 }

@@ -17,5 +17,31 @@
         /// 获取或设置 AppBar 高度。
         /// </summary>
         public string AppBarHeight { get; set; }
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get
+            {
+                return _loading;
+            }
+            set
+            {
+                _loading = value;
+
+                if (LoadingAction != null)
+                {
+                    LoadingAction();
+                }
+            }
+        }
+
+
+
+
+
+        public Action? LoadingAction { get; set; }
+
     }
 }

@@ -2,10 +2,6 @@
 using CQ.GS.Shared.Dtos.Filter;
 using CQ.GS.Shared.Dtos.Input;
 using CQ.GS.Shared.Dtos.Output;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Json;
-using System.Reflection;
-using System.Text;
 
 namespace CQ.GS.Client.Services
 {
@@ -14,76 +10,40 @@ namespace CQ.GS.Client.Services
     /// </summary>
     public class UserService
     {
-        private readonly HttpClient _httpClient;
+        private readonly MyHttpClient _httpClient;
 
-        public UserService(HttpClient httpClient)
+        public UserService(MyHttpClient httpClient)
         {
             _httpClient = httpClient;
-        }
 
-        private string ConvertToUrl<T>(T obj)
-        {
-            StringBuilder urlBuilder = new StringBuilder();
-            Type type = typeof(T);
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                string propertyName = property.Name;
-                object? propertyValue = property.GetValue(obj);
-                if (propertyValue != null)
-                {
-
-                    // 将属性名和属性值添加到URL参数
-                    if (urlBuilder.Length > 0)
-                    {
-                        urlBuilder.Append("&");
-                    }
-                    urlBuilder.AppendFormat("{0}={1}", UriDataStringEscape(propertyName), UriDataStringEscape(propertyValue.ToString()));
-                }
-            }
-
-            return urlBuilder.ToString();
-        }
-
-        private string UriDataStringEscape(string? argument)
-        {
-
-            if (argument == null)
-                return "";
-
-            return Uri.EscapeDataString(argument);
         }
 
 
-        /// <summary>
-        /// 获取用户列表 。
-        /// </summary>
-        /// <returns></returns>
-        //public async Task<ApiResultList<UserInfoOutput>?> GetUsers(UserInfoFilter query)
-        //{
-        //    var result = await _httpClient.PostAsJsonAsync("api/user/query", query);
-        //    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-        //    {
-        //        var content = await result.Content.ReadAsStringAsync();
-        //        var res = JsonConvert.DeserializeObject<ApiResultList<UserInfoOutput>>(content);
-        //        return res;
-        //    }
-
-        //    return new ApiResultList<UserInfoOutput>
-        //    {
-        //        Code = ResultCode.Error
-        //    };
-        //}
-
-        public async Task<ApiResultList<UserInfoOutput>?> GetUsers(UserInfoFilter query)
+        public async Task<ApiResultList<UserInfoOutput>> GetUsers(UserInfoFilter query)
         {
-            return await _httpClient.GetFromJsonAsync<ApiResultList<UserInfoOutput>>($"api/user?{ConvertToUrl(query)}");
+            return await _httpClient.GetAsync<UserInfoFilter, ApiResultList<UserInfoOutput>>($"api/user", query);
         }
 
-        public async Task<ApiResult<UserInfoUpdateInput>?> GetUserById(int id)
+        public async Task<ApiResult<UserInfoUpdateInput>> GetUserById(long id)
         {
-            return await _httpClient.GetFromJsonAsync<ApiResult<UserInfoUpdateInput>>($"api/user/{id}");
+            return await _httpClient.GetAsync<ApiResult<UserInfoUpdateInput>>($"api/user/{id}");
+        }
+
+        public async Task<ApiResult> Save(long id, UserInfoUpdateInput input)
+        {
+            return await _httpClient.PutAsync<UserInfoUpdateInput, ApiResult>($"api/user/{id}", input);
+
+        }
+
+        public async Task<ApiResult> Add(UserInfoAddInput input)
+        {
+            return await _httpClient.PostAsync<UserInfoAddInput, ApiResult>($"api/user", input);
+        }
+
+
+        public async Task<ApiResult> ModifyStatus(long id, UserInfoAddInput input)
+        {
+            return await _httpClient.PatchAsync<UserInfoAddInput, ApiResult>($"api/user/{id}", input);
         }
     }
 }

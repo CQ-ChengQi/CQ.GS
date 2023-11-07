@@ -6,8 +6,10 @@
 @inherits LayoutComponentBase
 
 @inject NavigationManager NavigationManager
+@inject AppSettings Settings;
 
 <MudThemeProvider />
+<MudSnackbarProvider />
 <MudDialogProvider FullWidth="true"
                    MaxWidth="MaxWidth.ExtraSmall"
                    CloseButton="true"
@@ -17,7 +19,9 @@
                    CloseOnEscapeKey="true" />
 <MudSnackbarProvider />
 
-
+<MudOverlay @bind-Visible="Settings.Loading" LightBackground="true" AutoClose="true" ZIndex="9999">
+    <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true" />
+</MudOverlay>
 <MudLayout>
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
@@ -69,9 +73,6 @@
     private RouteData? RouteData { get; set; }
 
 
-    [Inject]
-    private AppSettings? _appSettings { get; set; }
-
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("首页", href: "#", icon:Icons.Material.Filled.Home),
@@ -82,14 +83,17 @@
     {
         base.OnInitialized();
 
-        if (_appSettings != null)
+        if (Settings != null)
         {
-            _navMenuWidth = _appSettings.NavMenuWidth;
-            _appBarHeight = _appSettings.AppBarHeight;
+            _navMenuWidth = Settings.NavMenuWidth;
+            _appBarHeight = Settings.AppBarHeight;
+
+            Settings.LoadingAction = () =>
+            {
+                InvokeAsync(StateHasChanged);
+            };
         }
     }
-
-
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
