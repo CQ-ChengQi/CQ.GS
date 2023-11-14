@@ -37,10 +37,6 @@
             }
         }
 
-
-
-
-
         public Action? LoadingAction { get; set; }
 
     }

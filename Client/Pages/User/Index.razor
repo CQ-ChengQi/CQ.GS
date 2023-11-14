@@ -75,7 +75,7 @@
             <MudTh>
                 <MudTableSortLabel SortBy="new Func<UserInfoOutput, object>(x => x.Email)">邮箱</MudTableSortLabel>
             </MudTh>
-            <MudTh Style="width:200px; font-weight:700; text-align:center;">
+            <MudTh Style="width:400px; font-weight:700; text-align:center;">
                 操作
             </MudTh>
         </HeaderContent>
@@ -87,6 +87,7 @@
             <MudTd DataLabel="Gender">@context.Email</MudTd>
             <MudTd Style="text-align:center;">
                 <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info" OnClick="(e) => Edit(context)">编辑</MudButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info" OnClick="(e) => OpenDialog(context)">编辑（Dialog）</MudButton>
             </MudTd>
         </RowTemplate>
 
@@ -193,12 +194,18 @@
         NavMgr.NavigateTo(string.Format("/user/edit/{0}", item.Id));
     }
 
-    private void OpenDialog(UserInfoOutput item)
+    private async Task OpenDialog(UserInfoOutput item)
     {
         var parameters = new DialogParameters();
         parameters.Add("User", item);
 
-        DialogService.Show<EditDialog>($"编辑 - {item.Name}", parameters);
+        var result = await DialogService.Show<EditDialog>($"编辑 - {item.Name}", parameters).Result;
+
+        if (!result.Cancelled)
+        {
+            await InitUsers();
+            StateHasChanged();
+        }
     }
 
 }

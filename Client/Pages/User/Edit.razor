@@ -3,6 +3,7 @@
 
 
 @using System.ComponentModel.DataAnnotations;
+@using CQ.GS.Client.Components.Table
 @using CQ.GS.Client.Services;
 @using CQ.GS.Shared.Dtos.Input;
 @using CQ.GS.Shared.Dtos.Output;
@@ -18,37 +19,31 @@
 @inject AppSettings AppSettings
 
 
+<MyEdit T="UserInfoUpdateInput"
+        Id="Id"
+        OnSave="(id, model) => UserService.Save(id, model)"
+        OnGetData="(id) => UserService.GetUserById(id)"
+        SetModel="m => _model = m"
+        SaveComplete="GoList">
+    <ChildContent>
+        <MudTextField Label="用户名" HelperText="最大长度为 16 字符"
+                      @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
 
-<MudCard Elevation="0">
-    <MudContainer MaxWidth="MaxWidth.Small">
-        <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator />
-            <MudCardContent>
-                <MudTextField Label="用户名" HelperText="最大长度为 16 字符"
-                              @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
+        <MudTextField Label="姓名" HelperText="最大长度为 16 字符"
+                      @bind-Value="_model.Name" For="@(() => _model.Name)" />
+        <MudTextField Label="电子邮箱" Class="mt-3"
+                      @bind-Value="_model.Email" For="@(() => _model.Email)" />
 
-                <MudTextField Label="姓名" HelperText="最大长度为 16 字符"
-                              @bind-Value="_model.Name" For="@(() => _model.Name)" />
-                <MudTextField Label="电子邮箱" Class="mt-3"
-                              @bind-Value="_model.Email" For="@(() => _model.Email)" />
+        <MudSelect Label="性别" AnchorOrigin="Origin.BottomCenter" @bind-Value="_model.Gender" For="(()=>_model.Gender)">
+            <MudSelectItem Value="Gender.None">请选择</MudSelectItem>
+            <MudSelectItem Value="Gender.Girl">@Gender.Girl.GetDisplayName()</MudSelectItem>
+            <MudSelectItem Value="Gender.Man">@Gender.Man.GetDisplayName()</MudSelectItem>
+            <MudSelectItem Value="Gender.Other">@Gender.Other.GetDisplayName()</MudSelectItem>
+        </MudSelect>
 
-                <MudSelect Label="性别" AnchorOrigin="Origin.BottomCenter" @bind-Value="_model.Gender" For="(()=>_model.Gender)">
-                    <MudSelectItem Value="Gender.None">请选择</MudSelectItem>
-                    <MudSelectItem Value="Gender.Girl">@Gender.Girl.GetDisplayName()</MudSelectItem>
-                    <MudSelectItem Value="Gender.Man">@Gender.Man.GetDisplayName()</MudSelectItem>
-                    <MudSelectItem Value="Gender.Other">@Gender.Other.GetDisplayName()</MudSelectItem>
-                </MudSelect>
-
-                <MudNumericField Label="年龄" Variant="Variant.Text" @bind-Value="_model.Age" For="(()=>_model.Age)" />
-
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="()=>{AppSettings.Loading = !AppSettings.Loading;}">Loading</MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">保存</MudButton>
-            </MudCardActions>
-        </EditForm>
-    </MudContainer>
-</MudCard>
+        <MudNumericField Label="年龄" Variant="Variant.Text" @bind-Value="_model.Age" For="(()=>_model.Age)" />
+    </ChildContent>
+</MyEdit>
 
 
 
@@ -57,34 +52,9 @@
     public long Id { get; set; }
 
     private UserInfoUpdateInput _model = new UserInfoUpdateInput();
-    private bool _isLoading = false;
-
-    protected override async Task OnInitializedAsync()
+   
+    private void GoList()
     {
-        var result = await UserService.GetUserById(Id);
-        if (result != null && result.Code == ResultCode.Success)
-        {
-            _model = result.Data ?? new UserInfoUpdateInput();
-        }
-    }
-
-    private async void OnValidSubmit(EditContext context)
-    {
-        _isLoading = true;
-
-        StateHasChanged();
-
-        var result = await UserService.Save(Id, _model);
-
-        if (!result.IsSuccess)
-        {
-            Snackbar.Add(result.Message, Severity.Error);
-            return;
-        }
-
-        Snackbar.Add(result.Message, Severity.Success);
-        _isLoading = false;
-
         NavMgr.NavigateTo("/user");
     }
 }

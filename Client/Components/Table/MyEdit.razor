@@ -1,0 +1,94 @@
+﻿@using System.ComponentModel.DataAnnotations;
+@using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Dtos.Input;
+@using CQ.GS.Shared.Dtos.Output;
+@using CQ.GS.Shared.EnumModel;
+@using CQ.GS.Shared.Utils.Attributes;
+@using CQ.GS.Shared;
+@using Newtonsoft.Json;
+
+@typeparam T where T : class , new()
+
+@inject UserService UserService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavMgr
+@inject AppSettings AppSettings
+
+
+
+
+<MudCard Elevation="0">
+    <MudContainer MaxWidth="MaxWidth.Small">
+        <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <MudCardContent>
+                @ChildContent
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">保存</MudButton>
+            </MudCardActions>
+        </EditForm>
+    </MudContainer>
+</MudCard>
+
+
+
+@code {
+
+    [Parameter]
+    public long Id { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public Func<long, T, Task<ApiResult>>? OnSave { get; set; }
+
+    [Parameter]
+    public Func<long, Task<ApiResult<T>>>? OnGetData { get; set; }
+
+    [Parameter]
+    public EventCallback<T> SetModel { get; set; }
+
+    [Parameter]
+    public EventCallback SaveComplete { get; set; }
+
+    public T Model { get; set; } = new T();
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (OnGetData != null)
+        {
+            var result = await OnGetData(Id);
+            if (result != null && result.Code == ResultCode.Success)
+            {
+                Model = result.Data ?? new T();
+                await SetModel.InvokeAsync(Model);
+            }
+        }
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+
+        if (OnSave == null || Model == null)
+            return;
+
+        StateHasChanged();
+
+        var result = await OnSave(Id, Model);
+
+        if (!result.IsSuccess)
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+            return;
+        }
+
+        Snackbar.Add(result.Message, Severity.Success);
+
+        await SaveComplete.InvokeAsync();
+    }
+}

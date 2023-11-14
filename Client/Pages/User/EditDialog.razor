@@ -1,33 +1,66 @@
-﻿@using CQ.GS.Shared.Models;
+﻿@using System.ComponentModel.DataAnnotations;
+@using CQ.GS.Client.Components.Table
+@using CQ.GS.Client.Services;
+@using CQ.GS.Shared.Dtos.Input;
+@using CQ.GS.Shared.Dtos.Output;
+@using CQ.GS.Shared.EnumModel;
+@using CQ.GS.Shared.Utils.Attributes;
+@using Newtonsoft.Json;
 
-<MudDialog>
-    <DialogContent>
-        <MudContainer MaxWidth="MaxWidth.Small">
-            <EditForm Model="@User">
-                <DataAnnotationsValidator />
-                <MudGrid>
-                    <MudItem xs="12" sm="12">
-                        <MudCardContent>
+@attribute [PageInfo("用户信息编辑", "编辑编辑")]
 
-                        </MudCardContent>
-                    </MudItem>
-                </MudGrid>
-            </EditForm>
-        </MudContainer>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">取消</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">保存</MudButton>
-    </DialogActions>
-</MudDialog>
+@inject UserService UserService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavMgr
+@inject AppSettings AppSettings
+
+
+
+
+<MyEdit T="UserInfoUpdateInput"
+        Id="User == null ? 0 : User.Id"
+        OnSave="(id, model) => UserService.Save(id, model)"
+        OnGetData="(id) => UserService.GetUserById(id)"
+        SetModel="m => _model = m"
+        SaveComplete="CloseDialog">
+    <ChildContent>
+        <MudTextField Label="用户名" HelperText="最大长度为 16 字符"
+                      @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
+
+        <MudTextField Label="姓名" HelperText="最大长度为 16 字符"
+                      @bind-Value="_model.Name" For="@(() => _model.Name)" />
+        <MudTextField Label="电子邮箱" Class="mt-3"
+                      @bind-Value="_model.Email" For="@(() => _model.Email)" />
+
+        <MudSelect Label="性别" AnchorOrigin="Origin.BottomCenter" @bind-Value="_model.Gender" For="(()=>_model.Gender)">
+            <MudSelectItem Value="Gender.None">请选择</MudSelectItem>
+            <MudSelectItem Value="Gender.Girl">@Gender.Girl.GetDisplayName()</MudSelectItem>
+            <MudSelectItem Value="Gender.Man">@Gender.Man.GetDisplayName()</MudSelectItem>
+            <MudSelectItem Value="Gender.Other">@Gender.Other.GetDisplayName()</MudSelectItem>
+        </MudSelect>
+
+        <MudNumericField Label="年龄" Variant="Variant.Text" @bind-Value="_model.Age" For="(()=>_model.Age)" />
+    </ChildContent>
+</MyEdit>
+
+
 
 @code {
-    [CascadingParameter]
-    private MudDialogInstance? MudDialog { get; set; }
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     [Parameter]
-    public UserInfo? User { get; set; }
+    public UserInfoOutput? User { get; set; }
 
-    void Submit() => MudDialog?.Close(DialogResult.Ok(true));
-    void Cancel() => MudDialog?.Cancel();
+
+    private UserInfoUpdateInput _model = new UserInfoUpdateInput();
+
+    private void CloseDialog()
+    {
+        if (MudDialog != null)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+
+    }
+
 }
