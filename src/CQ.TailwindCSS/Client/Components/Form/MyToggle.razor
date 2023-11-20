@@ -1,0 +1,13 @@
+@namespace CQ
+
+@inherits MyComponentBase
+
+<button type="button" aria-pressed="@Checked" data-state="@CheckedStatus"
+    class="@Class @_class"
+    aria-label="Toggle italic" @onclick="HandlerClick" @attributes="UserAttributes">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M14 12a4 4 0 0 0 0-8H6v8"></path>
+        <path d="M15 20a4 4 0 0 0 0-8H6v8Z"></path>
+    </svg>
+</button>

@@ -1,0 +1,19 @@
+@namespace CQ
+
+@inherits MyComponentBase
+
+@inject MyClassBuild MyClassBuild
+
+
+<button class="@_class">
+    @ChildContent
+</button>
+
+@code {
+    private string _class => MyClassBuild.Build();
+
+    public void Build()
+    {
+
+    }
+}
