@@ -1,0 +1,14 @@
+{
+    "tailwindCSS.classAttributes": [
+        "class",
+        "className",
+        "ngClass",
+        "enter",
+        "enterFrom",
+        "enterTo",
+        "leave",
+        "leaveFrom",
+        "leaveTo"
+    ],
+    "editor.formatOnSave": true
+}
