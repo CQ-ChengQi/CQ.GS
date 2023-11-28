@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
 import "./globals.css";
 import { Providers } from "./providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import { notoSans } from "@/app/ui/fonts";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -17,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full bg-gray-100">
-      <body className={inter.className + " h-full"}>
+      <body className={`${notoSans.className} antialiased h-full`}>
         <Providers>{children}</Providers>
       </body>
     </html>
