@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, MouseEvent, useEffect } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -14,6 +14,7 @@ import ReactFlow, {
   Edge,
   Connection,
   useKeyPress,
+  KeyCode,
 } from "reactflow";
 import "reactflow/dist/base.css";
 
@@ -23,11 +24,20 @@ export default function Page() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange[]) =>
-      setNodes((nds: Node[]) => applyNodeChanges(changes, nds)),
-    []
-  );
+  const tabPressed = useKeyPress("Tab", {});
+
+  if (tabPressed) {
+    console.log("Tab");
+  }
+
+  const onNodesChange = useCallback((changes: NodeChange[]) => {
+    changes
+      .filter((s) => s.type === "select" && !s.selected)
+      .map((s) => {
+        console.log(s);
+      });
+    setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
+  }, []);
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) =>
       setEdges((eds) => applyEdgeChanges(changes, eds)),
@@ -39,8 +49,14 @@ export default function Page() {
     []
   );
 
-  const spacePressed = useKeyPress("Space");
-  const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
+  const onSelectionKey = useCallback((key: KeyCode | null | undefined) => {},
+  []);
+
+  const onNodeSelect = useCallback((event: MouseEvent, node: Node) => {}, []);
+
+  // const spacePressed = useKeyPress("Space");
+  // const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
+  const miniMapRressed = useKeyPress("m", {});
 
   return (
     <div className="h-screen">
@@ -48,6 +64,7 @@ export default function Page() {
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
+        onNodeClick={onNodeSelect}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
@@ -55,7 +72,7 @@ export default function Page() {
       >
         <Background />
         <Controls />
-        <MiniMap />
+        {miniMapRressed && <MiniMap />}
       </ReactFlow>
     </div>
   );

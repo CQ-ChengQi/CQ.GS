@@ -61,7 +61,7 @@ export const initialNodes: Node<{ label: string }>[] = [];
 
 export const initialEdges: Edge[] = [{ id: "1-2", source: "1", target: "2" }];
 
-g.setGraph({});
+g.setGraph({ rankdir: "RL" });
 g.setDefaultEdgeLabel(function () {
   return {};
 });
