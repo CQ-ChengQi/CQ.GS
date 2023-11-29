@@ -28,8 +28,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </h1>
           </div>
         </header>
-        <main>
-          <div className="mx-auto py-6 sm:px-6 lg:px-8">{children}</div>
+        <main className="min-h-full">
+          <div className="min-h-full mx-auto py-6 sm:px-6 lg:px-8">
+            {children}
+          </div>
         </main>
       </div>
     </>

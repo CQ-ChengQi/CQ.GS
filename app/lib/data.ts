@@ -1,3 +1,9 @@
+import { Edge, Node } from "reactflow";
+import FlowTextUpdateNode from "../ui/components/flow-nodes/text-update-node";
+import dagre from "@dagrejs/dagre";
+
+const g = new dagre.graphlib.Graph({});
+
 export const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -17,3 +23,68 @@ export const userNavigation = [
   { name: "Settings", href: "#" },
   { name: "Sign out", href: "#" },
 ];
+
+export const projects = [
+  {
+    name: "Flow",
+    initials: "FG",
+    href: "/dashboard/flow",
+    members: 16,
+    bgColor: "bg-pink-600",
+  },
+  {
+    name: "Component Design",
+    initials: "CD",
+    href: "#",
+    members: 12,
+    bgColor: "bg-purple-600",
+  },
+  {
+    name: "Templates",
+    initials: "T",
+    href: "#",
+    members: 16,
+    bgColor: "bg-yellow-500",
+  },
+  {
+    name: "React Components",
+    initials: "RC",
+    href: "#",
+    members: 8,
+    bgColor: "bg-green-500",
+  },
+];
+
+export const nodeTypes = { textUpdate: FlowTextUpdateNode };
+
+export const initialNodes: Node<{ label: string }>[] = [];
+
+export const initialEdges: Edge[] = [{ id: "1-2", source: "1", target: "2" }];
+
+g.setGraph({});
+g.setDefaultEdgeLabel(function () {
+  return {};
+});
+
+g.setNode("Hello 1", { label: "Hello 1", width: 162, height: 47 });
+g.setNode("World 2", { label: "Hello 2", width: 162, height: 47 });
+g.setNode("World 3", { label: "Hello 3", width: 162, height: 47 });
+g.setNode("World 4", { label: "Hello 4", width: 162, height: 47 });
+g.setNode("World 5", { label: "Hello 5", width: 162, height: 47 });
+
+dagre.layout(g);
+
+g.nodes().forEach(function (v, i) {
+  console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
+  initialNodes.push({
+    id: `${i}`,
+    data: {
+      label: `${v}`,
+    },
+    position: {
+      x: g.node(v).x,
+      y: g.node(v).y,
+    },
+    type: "textUpdate",
+  });
+});
