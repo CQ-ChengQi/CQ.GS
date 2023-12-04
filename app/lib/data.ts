@@ -1,9 +1,3 @@
-import { Edge, Node } from "reactflow";
-import FlowTextUpdateNode from "../ui/components/flow-nodes/text-update-node";
-import dagre from "@dagrejs/dagre";
-
-const g = new dagre.graphlib.Graph({});
-
 export const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -54,37 +48,3 @@ export const projects = [
     bgColor: "bg-green-500",
   },
 ];
-
-export const nodeTypes = { textUpdate: FlowTextUpdateNode };
-
-export const initialNodes: Node<{ label: string }>[] = [];
-
-export const initialEdges: Edge[] = [{ id: "1-2", source: "1", target: "2" }];
-
-g.setGraph({ rankdir: "RL" });
-g.setDefaultEdgeLabel(function () {
-  return {};
-});
-
-g.setNode("Hello 1", { label: "Hello 1", width: 162, height: 47 });
-g.setNode("World 2", { label: "Hello 2", width: 162, height: 47 });
-g.setNode("World 3", { label: "Hello 3", width: 162, height: 47 });
-g.setNode("World 4", { label: "Hello 4", width: 162, height: 47 });
-g.setNode("World 5", { label: "Hello 5", width: 162, height: 47 });
-
-dagre.layout(g);
-
-g.nodes().forEach(function (v, i) {
-  console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
-  initialNodes.push({
-    id: `${i}`,
-    data: {
-      label: `${v}`,
-    },
-    position: {
-      x: g.node(v).x,
-      y: g.node(v).y,
-    },
-    type: "textUpdate",
-  });
-});

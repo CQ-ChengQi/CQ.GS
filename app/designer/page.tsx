@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, MouseEvent, useEffect } from "react";
+import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -15,29 +15,64 @@ import ReactFlow, {
   Connection,
   useKeyPress,
   KeyCode,
+  useReactFlow,
+  ReactFlowProvider,
+  NodeSelectionChange,
 } from "reactflow";
 import "reactflow/dist/base.css";
 
-import { initialEdges, initialNodes, nodeTypes } from "../lib/data";
+import {
+  addNode,
+  getEdges,
+  getNodeTypeList,
+  getNodes,
+  selecteNode,
+} from "../lib/mindmap-data";
+import { NodeData } from "../lib/models/node-data";
 
-export default function Page() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+function Flow() {
+  const connectingNodeId = useRef(null);
+  const nodeList: Node<NodeData>[] = [];
 
-  const tabPressed = useKeyPress("Tab", {});
+  const [nodes, setNodes] = useState(nodeList);
+  const [edges, setEdges] = useState(getEdges());
+  const [currentNode, setCurrentNode] = useState();
 
-  if (tabPressed) {
-    console.log("Tab");
-  }
+  const { screenToFlowPosition } = useReactFlow();
+  // const { once, setOnce } = useState(true);
+
+  const tabPressed = useKeyPress("Tab");
+
+  useEffect(() => {
+    if (tabPressed) {
+      addNode();
+      setNodes(getNodes());
+    }
+  }, [tabPressed]);
+
+  const onConnectStart = useCallback((_, { nodeId }) => {
+    connectingNodeId.current = nodeId;
+  }, []);
+
+  const onConnectEnd = useCallback((event: any) => {
+    if (!connectingNodeId.current) {
+      return;
+    }
+
+    console.log(event);
+  }, []);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     changes
       .filter((s) => s.type === "select" && !s.selected)
       .map((s) => {
-        console.log(s);
+        const nodeSelectionChange = s as NodeSelectionChange;
+        selecteNode(nodeSelectionChange.id);
+        console.log(nodeSelectionChange.id);
       });
     setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
   }, []);
+
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) =>
       setEdges((eds) => applyEdgeChanges(changes, eds)),
@@ -66,8 +101,10 @@ export default function Page() {
         onNodesChange={onNodesChange}
         onNodeClick={onNodeSelect}
         onEdgesChange={onEdgesChange}
+        onConnectStart={onConnectStart}
         onConnect={onConnect}
-        nodeTypes={nodeTypes}
+        onConnectEnd={onConnectEnd}
+        nodeTypes={getNodeTypeList()}
         fitView
       >
         <Background />
@@ -75,5 +112,13 @@ export default function Page() {
         {miniMapRressed && <MiniMap />}
       </ReactFlow>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <ReactFlowProvider>
+      <Flow></Flow>
+    </ReactFlowProvider>
   );
 }
