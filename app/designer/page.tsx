@@ -64,13 +64,12 @@ function Flow() {
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     changes
-      .filter((s) => s.type === "select" && !s.selected)
+      .filter((s) => s.type === "select" && s.selected)
       .map((s) => {
         const nodeSelectionChange = s as NodeSelectionChange;
         selecteNode(nodeSelectionChange.id);
-        console.log(nodeSelectionChange.id);
       });
-    setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
+    // setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
   }, []);
 
   const onEdgesChange = useCallback(
