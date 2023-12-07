@@ -1,123 +1,69 @@
 "use client";
 
-import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { MindMapContext } from "../lib/stores/mindmap-context";
 import ReactFlow, {
   Background,
   Controls,
   MiniMap,
-  NodeChange,
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
   Node,
-  EdgeChange,
-  Edge,
-  Connection,
-  useKeyPress,
-  KeyCode,
-  useReactFlow,
   ReactFlowProvider,
-  NodeSelectionChange,
+  getRectOfNodes,
+  useKeyPress,
+  useNodesState,
 } from "reactflow";
+import {
+  NodeData,
+  ReactFlowNode,
+} from "../lib/stores/reactflow/reactflow-node";
+import FlowTextUpdateNode from "../ui/components/flow-nodes/text-update-node";
+
 import "reactflow/dist/base.css";
 
-import {
-  addNode,
-  getEdges,
-  getNodeTypeList,
-  getNodes,
-  selecteNode,
-} from "../lib/mindmap-data";
-import { NodeData } from "../lib/models/node-data";
+const nodeTypes = { textUpdate: FlowTextUpdateNode };
 
-function Flow() {
-  const connectingNodeId = useRef(null);
-  const nodeList: Node<NodeData>[] = [];
+function DesignerPage() {
+  const { getNodes, setCurrentSelectNode, addNode, layout } =
+    useContext(MindMapContext);
 
-  const [nodes, setNodes] = useState(nodeList);
-  const [edges, setEdges] = useState(getEdges());
-  const [currentNode, setCurrentNode] = useState();
+  // 将 IMyNode 转换为 Node<NodeData>
+  const getReactFlowNodes = () => {
+    const nodes = getNodes().map((node) => node as ReactFlowNode);
+    return nodes.map((node) => node.originNode as Node<NodeData>);
+  };
 
-  const { screenToFlowPosition } = useReactFlow();
-  // const { once, setOnce } = useState(true);
+  const [nodes, setNodes, onNodesChange] = useNodesState(getReactFlowNodes());
+
+  const onNodeClick = (event: React.MouseEvent, node: Node) => {
+    setCurrentSelectNode(new ReactFlowNode(node));
+  };
 
   const tabPressed = useKeyPress("Tab");
 
   useEffect(() => {
     if (tabPressed) {
       addNode();
-      setNodes(getNodes());
     }
-  }, [tabPressed]);
-
-  const onConnectStart = useCallback((_, { nodeId }) => {
-    connectingNodeId.current = nodeId;
-  }, []);
-
-  const onConnectEnd = useCallback((event: any) => {
-    if (!connectingNodeId.current) {
-      return;
-    }
-
-    console.log(event);
-  }, []);
-
-  const onNodesChange = useCallback((changes: NodeChange[]) => {
-    changes
-      .filter((s) => s.type === "select" && s.selected)
-      .map((s) => {
-        const nodeSelectionChange = s as NodeSelectionChange;
-        selecteNode(nodeSelectionChange.id);
-      });
-    // setNodes((nds: Node[]) => applyNodeChanges(changes, nds));
-  }, []);
-
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) =>
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
-  );
-
-  const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
-
-  const onSelectionKey = useCallback((key: KeyCode | null | undefined) => {},
-  []);
-
-  const onNodeSelect = useCallback((event: MouseEvent, node: Node) => {}, []);
-
-  // const spacePressed = useKeyPress("Space");
-  // const cmdAndSPressed = useKeyPress(["Meta+s", "Strg+s"]);
-  const miniMapRressed = useKeyPress("m", {});
+  }, [tabPressed, addNode]);
 
   return (
-    <div className="h-screen">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onNodeClick={onNodeSelect}
-        onEdgesChange={onEdgesChange}
-        onConnectStart={onConnectStart}
-        onConnect={onConnect}
-        onConnectEnd={onConnectEnd}
-        nodeTypes={getNodeTypeList()}
-        fitView
-      >
-        <Background />
-        <Controls />
-        {miniMapRressed && <MiniMap />}
-      </ReactFlow>
-    </div>
+    <ReactFlow
+      nodes={nodes}
+      nodeTypes={nodeTypes}
+      onNodesChange={onNodesChange}
+      onNodeClick={onNodeClick}
+    >
+      <Background />
+      <MiniMap />
+      <Controls />
+    </ReactFlow>
   );
 }
 
 export default function Page() {
   return (
     <ReactFlowProvider>
-      <Flow></Flow>
+      <DesignerPage />
     </ReactFlowProvider>
   );
 }
