@@ -1,43 +1,44 @@
 import React from "react";
+import { Edge, Node } from "reactflow";
 
-export interface IMyPostion {
-  x: number;
-  y: number;
+export interface EdgeData {
+  label: string;
+}
+export interface NodeData {
+  label: string;
+  width?: number;
+  height?: number;
 }
 
-export interface IMyNode {
-  id: string;
-  originNode: any;
-  setPosition(pos: IMyPostion): void;
-  setTargetPosition(targetPos: "top" | "bottom" | "left" | "right"): void;
-  setSourcePosition(sourcePos: "top" | "bottom" | "left" | "right"): void;
-}
-
-export interface IMyEdge {
-  id: string;
-  source: string;
-  target: string;
-  originEdge: any;
-}
+export type MyNode = Node<NodeData>;
+export type MyEdge = Edge<EdgeData>;
 
 export interface MindMapContextType {
-  addNode: () => void;
+  addNode: () => MyNode | void;
+  // addEdge: (source: string, target: string) => void;
   removeNode: (id: string) => void;
-  getNodes: () => Array<IMyNode>;
-  getEdges: () => Array<IMyEdge>;
-  currentSelectNode: IMyNode | undefined;
-  setCurrentSelectNode: (node: IMyNode) => void;
+  currentSelectNode: MyNode | undefined;
+  setCurrentSelectNode: (
+    value: React.SetStateAction<MyNode | undefined>
+  ) => void;
   layout: () => void;
+  nodes: Array<MyNode>;
+  setNodes: (value: React.SetStateAction<MyNode[]>) => void;
+  edges: Array<MyEdge>;
+  setEdges: (value: React.SetStateAction<MyEdge[]>) => void;
 }
 
-const defaultState: MindMapContextType = {
+export const defaultState: MindMapContextType = {
   addNode: () => {},
+  // addEdge: (source: string, target: string) => {},
   removeNode: (id: string) => {},
-  getNodes: () => [],
-  getEdges: () => [],
   currentSelectNode: undefined,
-  setCurrentSelectNode: (node: IMyNode) => {},
+  setCurrentSelectNode: (value: React.SetStateAction<MyNode | undefined>) => {},
   layout: () => {},
+  nodes: [],
+  setNodes: (value: React.SetStateAction<MyNode[]>) => {},
+  edges: [],
+  setEdges: (value: React.SetStateAction<MyEdge[]>) => {},
 };
 
 export const MindMapContext = React.createContext(defaultState);

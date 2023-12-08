@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
-  IMyEdge,
-  IMyNode,
+  EdgeData,
   MindMapContext,
-} from "../lib/stores/mindmap-context";
-import { Edge, Node } from "reactflow";
-import {
+  MyEdge,
+  MyNode,
   NodeData,
-  ReactFlowNode,
-} from "../lib/stores/reactflow/reactflow-node";
+} from "../lib/stores/mindmap-context";
+import { Edge, Node, Position } from "reactflow";
 import dagre from "@dagrejs/dagre";
-import { ReactFlowEdge } from "../lib/stores/reactflow/reactflow-edge";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -23,8 +20,8 @@ export default function DesignerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [nodes, setNodes] = useState<Array<ReactFlowNode>>([
-    new ReactFlowNode({
+  const [nodes, setNodes] = useState<Array<Node<NodeData>>>([
+    {
       id: uuidv4(),
       position: {
         x: 0,
@@ -35,18 +32,58 @@ export default function DesignerLayout({
       },
       selected: true,
       type: "textUpdate",
-    }),
+    },
   ]);
-  const [edges, setEdges] = useState<Array<IMyEdge>>([]);
-  const [currentSelectNode, setCurrentSelectNode] = useState<IMyNode>();
 
-  const addNode = () => {
-    if (!currentSelectNode) {
+  const [edges, setEdges] = useState<Array<MyEdge>>([]);
+  const [currentSelectNode, setCurrentSelectNode] = useState<MyNode>();
+
+  const nodesRef = useRef<Array<MyNode>>(nodes);
+  const edgesRef = useRef<Array<MyEdge>>(edges);
+  const currentSelectNodeRef = useRef<MyNode | undefined>(currentSelectNode);
+
+  useEffect(() => {
+    currentSelectNodeRef.current = currentSelectNode;
+  }, [currentSelectNode]);
+
+  useEffect(() => {
+    nodesRef.current = nodes;
+  }, [nodes]);
+
+  const layout = useCallback(() => {
+    dagreGraph.setGraph({ rankdir: "RL", align: "UL" });
+    nodesRef.current.forEach((item) => {
+      console.log(item);
+      dagreGraph.setNode(item.id, {
+        width: item.data.width ?? 0,
+        height: item.data.height ?? 0,
+      });
+    });
+
+    edgesRef.current.forEach((item) => {
+      dagreGraph.setEdge(item.source, item.target, { width: 200 });
+    });
+
+    dagre.layout(dagreGraph);
+
+    nodesRef.current.forEach((node) => {
+      const gnode = dagreGraph.node(node.id);
+      node.position = { x: gnode.x - 162 / 2, y: gnode.y - 47 / 2 };
+      node.targetPosition = Position.Right;
+      node.sourcePosition = Position.Left;
+    });
+
+    setNodes(nodesRef.current);
+    setEdges(edgesRef.current);
+  }, []);
+
+  const addNode = useCallback(() => {
+    if (!currentSelectNodeRef.current) {
       return;
     }
 
     const id = uuidv4();
-    const newNode = new ReactFlowNode({
+    const newNode: MyNode = {
       id: id,
       position: {
         x: 0,
@@ -57,62 +94,36 @@ export default function DesignerLayout({
       },
       selected: false,
       type: "textUpdate",
-    });
+    };
 
-    const newEdge = new ReactFlowEdge({
+    const newEdge: MyEdge = {
       id: uuidv4(),
-      target: currentSelectNode.id,
+      target: currentSelectNodeRef.current?.id,
       source: id,
-    });
+    };
 
-    setNodes((prevNodes) => [...prevNodes, newNode]);
-    setEdges((prevEdges) => [...prevEdges, newEdge]);
-  };
-  const getNodes = () => {
-    return nodes;
-  };
+    nodesRef.current = nodesRef.current.concat(newNode);
+    edgesRef.current = edgesRef.current.concat(newEdge);
+
+    layout();
+
+    return newNode;
+  }, [layout]);
+
   const removeNode = () => {};
-  const getEdges = () => {
-    return edges;
-  };
-
-  const setSelectNode = (node: IMyNode) => {
-    setCurrentSelectNode(node);
-  };
-
-  const layout = () => {
-    dagreGraph.setGraph({ rankdir: "TB" }); // TB for top to bottom graph
-
-    nodes.forEach((item) => {
-      dagreGraph.setNode(item.id, { width: 162, height: 47 });
-    });
-
-    edges.forEach((item) => {
-      dagreGraph.setEdge(item.source, item.target);
-    });
-
-    dagre.layout(dagreGraph);
-
-    nodes.forEach((node) => {
-      const gnode = dagreGraph.node(node.id);
-      node.setTargetPosition("top");
-      node.setSourcePosition("bottom");
-      node.setPosition({ x: gnode.x, y: gnode.y });
-    });
-
-    setNodes(nodes);
-  };
 
   return (
     <MindMapContext.Provider
       value={{
         addNode,
-        getNodes,
         removeNode,
-        getEdges,
         currentSelectNode,
-        setCurrentSelectNode: setSelectNode,
+        setCurrentSelectNode,
         layout,
+        nodes,
+        setNodes,
+        edges,
+        setEdges,
       }}
     >
       {children}
