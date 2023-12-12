@@ -23,11 +23,11 @@ import ReactFlow, {
   useReactFlow,
 } from "reactflow";
 
-import FlowTextUpdateNode from "../ui/components/flow-nodes/text-update-node";
+import BlockNote from "../ui/components/flow-nodes/block-note";
 
 import "reactflow/dist/base.css";
 
-const nodeTypes = { textUpdate: FlowTextUpdateNode };
+const nodeTypes = { blockNote: BlockNote };
 
 function DesignerPage() {
   const {
@@ -82,11 +82,11 @@ function DesignerPage() {
   useEffect(() => {
     if (tabPressed) {
       var newNode = addNode();
-      if (newNode) {
-        reactFlowInstance.setCenter(newNode.position.x, newNode.position.y, {
-          zoom: 1,
-        });
-      }
+      // if (newNode) {
+      //   reactFlowInstance.setCenter(newNode.position.x, newNode.position.y, {
+      //     zoom: 1,
+      //   });
+      // }
     }
   }, [tabPressed, addNode, reactFlowInstance]);
 

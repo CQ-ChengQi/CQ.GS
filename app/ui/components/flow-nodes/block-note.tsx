@@ -11,8 +11,11 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef } from "react";
+import Katext from "katex";
 
-function ResizeIcon() {
+import "katex/dist/katex.min.css";
+
+function ResizeIcon({ props }: { props: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,6 +28,7 @@ function ResizeIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       style={{ position: "absolute", right: 5, bottom: 5 }}
+      {...{ props }}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <polyline points="16 20 20 20 20 16" />
@@ -35,7 +39,7 @@ function ResizeIcon() {
   );
 }
 
-export default function FlowTextUpdateNode({
+export default function BlockNote({
   id,
   data,
   isConnectable,
@@ -48,6 +52,10 @@ export default function FlowTextUpdateNode({
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
+
+  const html = Katext.renderToString("x^2 + b - c", {
+    throwOnError: false,
+  });
 
   useEffect(() => {
     if (nodeRef.current) {
@@ -72,34 +80,30 @@ export default function FlowTextUpdateNode({
 
   return (
     <>
+      <div className="bg-white shadow sm:rounded-lg min-h-full">
+        <div className="px-4 py-5 sm:p-6">
+          <div className="mt-2 max-w-xl text-sm text-gray-500">
+            <p dangerouslySetInnerHTML={{ __html: html }}></p>
+          </div>
+        </div>
+      </div>
+
+      <div ref={nodeRef} className="">
+        <Handle
+          type="source"
+          position={Position.Left}
+          className="h-6 w-6 !bg-slate-400"
+        />
+        <Handle
+          type="target"
+          position={Position.Right}
+          className="h-6 w-6 !bg-slate-400"
+        />
+      </div>
+
       <NodeResizeControl onResizeEnd={onResizeEnd}>
         <ResizeIcon />
       </NodeResizeControl>
-      <div
-        ref={nodeRef}
-        className="flex rounded-md shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-full"
-      >
-        <div
-          className={classNames(
-            "bg-pink-600",
-            "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white",
-            clsx(selected && "bg-pink-900")
-          )}
-        >
-          {selected ? "T" : "F"}
-        </div>
-        <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
-          <div className="flex-1 truncate px-4 py-2 text-sm">
-            <span className="font-medium text-gray-900 hover:text-gray-600">
-              {/* <input className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background "></input> */}
-              {data.label}
-            </span>
-            <p className="text-gray-500">1 成员</p>
-          </div>
-        </div>
-        <Handle type="source" position={Position.Left} />
-        <Handle type="target" position={Position.Right} />
-      </div>
     </>
   );
 }

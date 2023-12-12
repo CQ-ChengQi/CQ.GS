@@ -28,10 +28,10 @@ export default function DesignerLayout({
         y: 0,
       },
       data: {
-        label: "根节点",
+        label: "Root",
       },
       selected: true,
-      type: "textUpdate",
+      type: "blockNote",
     },
   ]);
 
@@ -53,7 +53,6 @@ export default function DesignerLayout({
   const layout = useCallback(() => {
     dagreGraph.setGraph({ rankdir: "RL", align: "UL" });
     nodesRef.current.forEach((item) => {
-      console.log(item);
       dagreGraph.setNode(item.id, {
         width: item.data.width ?? 0,
         height: item.data.height ?? 0,
@@ -93,7 +92,7 @@ export default function DesignerLayout({
         label: "新节点",
       },
       selected: false,
-      type: "textUpdate",
+      type: "blockNote",
     };
 
     const newEdge: MyEdge = {
