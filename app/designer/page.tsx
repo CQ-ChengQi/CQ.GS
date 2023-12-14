@@ -73,9 +73,9 @@ function DesignerPage() {
 
   const onNodeDragStop = useCallback(
     (event: any, node: Node, nodes: Node[]) => {
-      layout();
+      // layout();
     },
-    [layout]
+    []
   );
 
   const tabPressed = useKeyPress("Tab");

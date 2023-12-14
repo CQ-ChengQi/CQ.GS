@@ -14,6 +14,7 @@ import { useCallback, useEffect, useRef } from "react";
 import Katext from "katex";
 
 import "katex/dist/katex.min.css";
+import MdIt from "../markdown/md-it";
 
 function ResizeIcon({ props }: { props: string }) {
   return (
@@ -39,6 +40,10 @@ function ResizeIcon({ props }: { props: string }) {
   );
 }
 
+const html = Katext.renderToString("x^2 + b - c", {
+  throwOnError: false,
+});
+
 export default function BlockNote({
   id,
   data,
@@ -52,10 +57,6 @@ export default function BlockNote({
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
-
-  const html = Katext.renderToString("x^2 + b - c", {
-    throwOnError: false,
-  });
 
   useEffect(() => {
     if (nodeRef.current) {
@@ -85,6 +86,10 @@ export default function BlockNote({
           <div className="mt-2 max-w-xl text-sm text-gray-500">
             <p dangerouslySetInnerHTML={{ __html: html }}></p>
           </div>
+          <MdIt
+            text="1234"
+            className="text-2xl bg-blue-500 text-white p-4"
+          ></MdIt>
         </div>
       </div>
 
@@ -102,7 +107,7 @@ export default function BlockNote({
       </div>
 
       <NodeResizeControl onResizeEnd={onResizeEnd}>
-        <ResizeIcon />
+        <ResizeIcon props={""} />
       </NodeResizeControl>
     </>
   );
