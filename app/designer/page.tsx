@@ -103,7 +103,7 @@ function DesignerPage() {
       nodeTypes={nodeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      onNodeDragStop={onNodeDragStop}
+      // onNodeDragStop={onNodeDragStop}
       onConnect={onConnect}
       onNodeClick={onNodeClick}
       proOptions={{ hideAttribution: true }}

@@ -10,11 +10,18 @@ import {
 } from "reactflow";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { useCallback, useEffect, useRef } from "react";
+import React, {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Katext from "katex";
 
 import "katex/dist/katex.min.css";
 import MdIt from "../markdown/md-it";
+import MilkdownEditorWrapper from "../markdown/md-mikdown";
 
 function ResizeIcon({ props }: { props: string }) {
   return (
@@ -78,19 +85,25 @@ export default function BlockNote({
     },
     [id, data, updateNodeInternals]
   );
+  const [content, setContent] = useState("");
+  const handleContentChange = useCallback(
+    (event: React.FormEvent<HTMLDivElement>) => {
+      setContent(event?.currentTarget.innerText);
+    },
+    []
+  );
 
   return (
     <>
       <div className="bg-white shadow sm:rounded-lg min-h-full">
-        <div className="px-4 py-5 sm:p-6">
+        {/* <div className="px-4 py-5 sm:p-6">
           <div className="mt-2 max-w-xl text-sm text-gray-500">
             <p dangerouslySetInnerHTML={{ __html: html }}></p>
           </div>
-          <MdIt
-            text="1234"
-            className="text-2xl bg-blue-500 text-white p-4"
-          ></MdIt>
-        </div>
+         
+        </div> */}
+
+        <MilkdownEditorWrapper></MilkdownEditorWrapper>
       </div>
 
       <div ref={nodeRef} className="">

@@ -1,8 +1,14 @@
 import { MdContext } from "@/app/lib/stores/md-context";
 import React, { useCallback } from "react";
-import markdownit from "markdown-it";
+import { RendererObject, marked } from "marked";
 
-const md = markdownit();
+const renderer: RendererObject = {
+  heading(text: string, level: number, raw: string) {
+    return `<h${level} class="text-red-500">${text}</h${level}>`;
+  },
+};
+
+marked.use({ renderer });
 
 export default function MdProvider({
   children,
@@ -10,7 +16,11 @@ export default function MdProvider({
   children: React.ReactNode;
 }) {
   const toHtml = useCallback((text: string) => {
-    return md.render(text);
+    const html = marked.parse(text);
+    if (typeof html === "string") {
+      return html;
+    }
+    return "";
   }, []);
 
   return <MdContext.Provider value={{ toHtml }}>{children}</MdContext.Provider>;
