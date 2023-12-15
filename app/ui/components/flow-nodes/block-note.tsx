@@ -102,7 +102,6 @@ export default function BlockNote({
           </div>
          
         </div> */}
-
         <MilkdownEditorWrapper></MilkdownEditorWrapper>
       </div>
 

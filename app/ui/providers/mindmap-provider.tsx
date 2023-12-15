@@ -6,6 +6,7 @@ import {
   MindMapContext,
   MyEdge,
   MyNode,
+  NodeData,
 } from "@/app/lib/stores/mindmap-context";
 
 const dagreGraph = new dagre.graphlib.Graph();
