@@ -17,11 +17,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Katext from "katex";
-
-import "katex/dist/katex.min.css";
-import MdIt from "../markdown/md-it";
-import MilkdownEditorWrapper from "../markdown/md-mikdown";
 
 function ResizeIcon({ props }: { props: string }) {
   return (
@@ -46,10 +41,6 @@ function ResizeIcon({ props }: { props: string }) {
     </svg>
   );
 }
-
-const html = Katext.renderToString("x^2 + b - c", {
-  throwOnError: false,
-});
 
 export default function BlockNote({
   id,
@@ -102,7 +93,6 @@ export default function BlockNote({
           </div>
          
         </div> */}
-        <MilkdownEditorWrapper></MilkdownEditorWrapper>
       </div>
 
       <div ref={nodeRef} className="">

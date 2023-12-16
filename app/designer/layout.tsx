@@ -1,6 +1,5 @@
 "use client";
 
-import MdProvider from "../ui/providers/md-provider";
 import MindMapProvider from "../ui/providers/mindmap-provider";
 
 export default function DesignerLayout({
@@ -8,9 +7,5 @@ export default function DesignerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <MindMapProvider>
-      <MdProvider>{children}</MdProvider>
-    </MindMapProvider>
-  );
+  return <MindMapProvider>{children}</MindMapProvider>;
 }

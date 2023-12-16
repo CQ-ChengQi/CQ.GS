@@ -1,10 +1,4 @@
-import { MilkdownProvider } from "@milkdown/react";
-import { MilkdownEditor } from "../ui/components/markdown/md-mikdown";
-
+"use client";
 export default function Page() {
-  return (
-    <MilkdownProvider>
-      <MilkdownEditor />
-    </MilkdownProvider>
-  );
+  return <div>1</div>;
 }
