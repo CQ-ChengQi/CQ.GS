@@ -38,25 +38,27 @@ export default function Page() {
 
   const handleInput = useCallback((event: React.FormEvent<HTMLPreElement>) => {
     // setHtml({ __html: marked.parse("# Heading").toString() });
-    setInputContent(event.currentTarget.textContent);
+    // setInputContent(event.currentTarget.textContent);
     console.log(event);
   }, []);
 
   const handleKeydown = useCallback(
     (event: React.KeyboardEvent<HTMLPreElement>) => {
       if (event.key === "Enter") {
-        // event.preventDefault();
-        // console.log(inputContent);
-        // if (inputContent != null) {
-        //   setBlocks((s) =>
-        //     s.concat(...[{ __html: marked.parse(inputContent) }])
-        //   );
-        //   setInputContent(null);
-        // }
+        event.preventDefault();
+        console.log(inputContent);
+        if (inputContent != null) {
+          setBlocks((s) =>
+            s.concat(...[{ __html: marked.parse(inputContent) }])
+          );
+          setInputContent(null);
+        }
       }
     },
     [inputContent]
   );
+
+  const handleFocus = useCallback(() => {}, []);
 
   useEffect(() => {
     const ls = blocks.map((s) => {
@@ -72,8 +74,11 @@ export default function Page() {
         className="h-full max-w-3xl p-4 prose"
         onInput={handleInput}
         onKeyDown={handleKeydown}
-        dangerouslySetInnerHTML={html}
-      ></pre>
+      >
+        {blocks.map((s, index) => (
+          <div key={index} dangerouslySetInnerHTML={s} onFocus={}></div>
+        ))}
+      </pre>
     </>
   );
 }
