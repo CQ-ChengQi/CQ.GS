@@ -13,6 +13,24 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      typography: (theme: any) => ({
+        DEFAULT: {
+          css: {
+            color: theme("colors.gray.800"),
+            blockquote: {
+              color: theme("colors.red.500"),
+              borderLeftWidth: theme("borderWidth.4"),
+              borderLeftColor: theme("colors.red.500"),
+              "p::before": {
+                content: "none",
+              },
+              "p::after": {
+                content: "none",
+              },
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [require("@tailwindcss/typography")],

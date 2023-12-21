@@ -1,22 +1,11 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import MdEditor from "../ui/compontens/md/editor";
 
 export default function Page() {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
-    onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      console.log(html);
-    },
-  });
-
-  const handlerChange = (event: React.FormEvent<HTMLElement>) => {
-    console.log(event);
+  const handerUpdate = (html: string) => {
+    console.log(html);
   };
 
-  return <EditorContent editor={editor} onChange={handlerChange} />;
+  return <MdEditor onUpdate={handerUpdate} />;
 }
