@@ -16,7 +16,8 @@
     "@tiptap/starter-kit": "^2.1.13",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "reactflow": "^11.10.1"
   },
   "devDependencies": {
     "@types/node": "^20",
