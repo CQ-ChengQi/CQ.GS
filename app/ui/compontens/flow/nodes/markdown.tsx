@@ -1,4 +1,4 @@
-import { NodeData } from "@/app/lib/mindmap/types";
+import { NodeData } from "@/app/lib/flow/types";
 import React from "react";
 import { Handle, NodeProps, NodeToolbar, Position } from "reactflow";
 import MdEditor from "../../md/editor";
@@ -16,19 +16,15 @@ export default function MarkdownNode(props: MarkdownNodeProps) {
 
   return (
     <div>
-      <Handle type="target" position={Position.Left} className="bg-slate-300" />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="bg-slate-300"
-      />
+      <Handle type="target" position={Position.Left} className="" />
+      <Handle type="source" position={Position.Right} className="" />
 
       <div
-        className="bg-white shadow sm:rounded-lg cursor-text xl:w-full "
+        className="bg-white shadow sm:rounded-lg cursor-text xl:w-full min-w-60 "
         onMouseDownCapture={handleMouseDown}
       >
-        <div className="px-4 py-5 sm:p-6">
-          <MdEditor onUpdate={handleUpdate} />
+        <div className="px-4 py-2">
+          <MdEditor onUpdate={handleUpdate} content={props.data.content} />
         </div>
       </div>
     </div>

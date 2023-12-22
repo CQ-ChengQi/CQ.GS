@@ -5,6 +5,7 @@ import React from "react";
 export type MdEditorProps = {
   onUpdate: (value: string) => void;
   className?: string;
+  content?: string;
 };
 
 export default function MdEditor(props: MdEditorProps) {
@@ -13,10 +14,10 @@ export default function MdEditor(props: MdEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-slate prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none",
       },
     },
-    content: "<p>Hello World! 🌎️</p>",
+    content: props.content ?? "<p></p>",
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       props.onUpdate(html);

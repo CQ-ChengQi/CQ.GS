@@ -5,7 +5,7 @@ export type EdgeData = {
 };
 
 export type NodeData = {
-  label: string;
+  content?: string;
   width?: number;
   height?: number;
 };
@@ -15,5 +15,9 @@ export type MyEdge = Edge<EdgeData>;
 
 export type ReactFlowContextType = {
   nodes: Array<MyNode>;
+  edges: Array<MyEdge>;
+  setNodes: (value: React.SetStateAction<MyNode[]>) => void;
+  setEdges: (value: React.SetStateAction<MyEdge[]>) => void;
   addNode: () => MyNode | void;
+  setCurrentSelectedNode: (node: MyNode) => void;
 };

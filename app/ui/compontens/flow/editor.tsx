@@ -1,4 +1,4 @@
-import { MyNode } from "@/app/lib/mindmap/types";
+import { MyNode, NodeData } from "@/app/lib/flow/types";
 import ReactFlow, {
   Controls,
   Background,
@@ -6,20 +6,31 @@ import ReactFlow, {
   BackgroundVariant,
   ControlButton,
   Panel,
+  applyNodeChanges,
+  NodeChange,
+  useKeyPress,
 } from "reactflow";
 import "reactflow/dist/base.css";
 
 import MarkdownNode from "./nodes/markdown";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import ButtonEdge from "./edges/ButtonEdge";
+import ButtonGroups from "../common/button-groups";
+import UserAvatars from "../common/user-avatars";
+import { ReactFlowContext } from "@/app/lib/flow/context";
 
-type FlowEditorProps = {
-  nodes: Array<MyNode>;
-};
-
-export default function FlowEditor(props: FlowEditorProps) {
-  const { nodes } = props;
+export default function FlowEditor() {
   const reactFlowInstance = useReactFlow();
+
+  const { nodes, edges, setNodes, setCurrentSelectedNode, addNode } =
+    useContext(ReactFlowContext);
+
+  const tabPressed = useKeyPress("Tab");
+  useEffect(() => {
+    if (tabPressed) {
+      var newNode = addNode();
+    }
+  }, [tabPressed, addNode]);
 
   useEffect(() => {
     reactFlowInstance.setCenter(0, 0, { zoom: 1 });
@@ -37,9 +48,19 @@ export default function FlowEditor(props: FlowEditorProps) {
     };
   }, []);
 
-  const hanldNodeClick = useCallback(
-    (event: React.MouseEvent, node: MyNode) => {},
-    []
+  const hanldeNodeClick = useCallback(
+    (event: React.MouseEvent, node: MyNode) => {
+      setCurrentSelectedNode(node);
+      console.log(node);
+    },
+    [setCurrentSelectedNode]
+  );
+
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      setNodes((nds: MyNode[]) => applyNodeChanges<NodeData>(changes, nds));
+    },
+    [setNodes]
   );
 
   return (
@@ -47,53 +68,30 @@ export default function FlowEditor(props: FlowEditorProps) {
       proOptions={{ hideAttribution: true }}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      onNodeClick={hanldNodeClick}
-      {...props}
+      onNodeClick={hanldeNodeClick}
+      nodes={nodes}
+      onNodesChange={handleNodesChange}
+      edges={edges}
     >
       <Background variant={BackgroundVariant.Lines} />
       <Controls>
         <ControlButton
           onClick={() => alert("Something magical just happened. ✨")}
-        ></ControlButton>
+        >
+          1
+        </ControlButton>
+        <ControlButton
+          onClick={() => alert("Something magical just happened. ✨")}
+        >
+          2
+        </ControlButton>
       </Controls>
       <Panel position="top-left">
-        <span className="isolate inline-flex rounded-md shadow-sm">
-          <button
-            type="button"
-            className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-          >
-            Markdown
-          </button>
-          <button
-            type="button"
-            className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-          >
-            MindMap
-          </button>
-          <button
-            type="button"
-            className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-          >
-            Days
-          </button>
-        </span>
+        <ButtonGroups />
       </Panel>
       <Panel position="top-right">
-        <a href="#" className="group block flex-shrink-0">
-          <div className="flex items-center">
-            <div></div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                Tom Cook
-              </p>
-              <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                View profile
-              </p>
-            </div>
-          </div>
-        </a>
+        <UserAvatars />
       </Panel>
-      <Panel position="bottom-center">2</Panel>
     </ReactFlow>
   );
 }
