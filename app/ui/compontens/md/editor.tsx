@@ -1,8 +1,10 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import React from "react";
 
 export type MdEditorProps = {
   onUpdate: (value: string) => void;
+  className?: string;
 };
 
 export default function MdEditor(props: MdEditorProps) {
@@ -11,7 +13,7 @@ export default function MdEditor(props: MdEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none",
+          "prose prose-slate prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none",
       },
     },
     content: "<p>Hello World! 🌎️</p>",
@@ -19,16 +21,16 @@ export default function MdEditor(props: MdEditorProps) {
       const html = editor.getHTML();
       props.onUpdate(html);
     },
-    injectCSS: false,
+    injectCSS: true,
+    onFocus: ({ editor, event }) => {
+      console.log("focus");
+      event.stopPropagation();
+    },
   });
 
   if (!editor) {
     return null;
   }
 
-  const handlerChange = (event: React.FormEvent<HTMLElement>) => {
-    console.log(event);
-  };
-
-  return <EditorContent editor={editor} onChange={handlerChange} />;
+  return <EditorContent editor={editor} className={props.className} />;
 }

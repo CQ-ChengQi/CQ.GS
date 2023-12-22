@@ -2,6 +2,7 @@
 
 import { ReactFlowContext } from "@/app/lib/mindmap/context";
 import { MyNode } from "@/app/lib/mindmap/types";
+import { tree } from "next/dist/build/templates/app-page";
 import React, { useState } from "react";
 import { ReactFlowProvider } from "reactflow";
 
@@ -18,6 +19,7 @@ export function FlowEditorProvider({
       data: {
         label: "Md",
       },
+      selected: true,
     },
   ]);
 
