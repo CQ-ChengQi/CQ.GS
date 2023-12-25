@@ -8,6 +8,7 @@ const defaultValue: ReactFlowContextType = {
   setEdges: (value: React.SetStateAction<MyEdge[]>) => {},
   addNode: () => {},
   setCurrentSelectedNode: (node: MyNode) => {},
+  setCurrentEditNode: function (node?: MyNode): void {},
 };
 
 export const ReactFlowContext = React.createContext(defaultValue);

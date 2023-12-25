@@ -16,8 +16,10 @@ export type MyEdge = Edge<EdgeData>;
 export type ReactFlowContextType = {
   nodes: Array<MyNode>;
   edges: Array<MyEdge>;
+  currentEditNode?: MyNode;
   setNodes: (value: React.SetStateAction<MyNode[]>) => void;
   setEdges: (value: React.SetStateAction<MyEdge[]>) => void;
   addNode: () => MyNode | void;
   setCurrentSelectedNode: (node: MyNode) => void;
+  setCurrentEditNode: (node?: MyNode) => void;
 };
