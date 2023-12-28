@@ -31,31 +31,81 @@ import UserAvatars from "../common/user-avatars";
 import { ReactFlowContext } from "@/app/lib/flow/context";
 import { v4 as uuidv4 } from "uuid";
 import { ElkMindMap } from "@/app/lib/flow/elk-mindmap";
+import NoteNode from "./nodes/note";
+
+const initNodes: Array<MyNode> = [
+  {
+    id: "root",
+    type: "markdownNode",
+    position: { x: 0, y: 0 },
+    data: {
+      content: "<h1>主题</h1>",
+    },
+    focusable: false,
+  },
+  {
+    id: "root2",
+    type: "markdownNode",
+    position: { x: 300, y: -200 },
+    data: {
+      content: "<h1>主题2</h1>",
+    },
+    focusable: false,
+    parentNode: "root",
+  },
+  {
+    id: "root3",
+    type: "markdownNode",
+    position: { x: 300, y: 200 },
+    data: {
+      content: "<h1>主题3</h1>",
+    },
+    focusable: false,
+    parentNode: "root",
+  },
+];
+
+const initEdges: Array<MyEdge> = [
+  {
+    id: uuidv4(),
+    source: "root",
+    target: "root2",
+  },
+  {
+    id: uuidv4(),
+    source: "root",
+    target: "root3",
+  },
+];
 
 export default function FlowEditor() {
   const reactFlowInstance = useReactFlow();
   const currentNode = useRef<MyNode>();
-  const [edges, setEdges, onEdgesChange] = useEdgesState<EdgeData>([]);
-  const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>([]);
-  const ekl = useRef<ElkMindMap>(new ElkMindMap());
+  const [edges, setEdges, onEdgesChange] = useEdgesState<EdgeData>(initEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(initNodes);
+
+  const ekl = useRef<ElkMindMap>(new ElkMindMap(initNodes, initEdges));
   const { setCurrentEditNode } = useContext(ReactFlowContext);
 
   useEffect(() => {
-    setNodes(ekl.current.getNodes());
-  }, [setNodes]);
-
-  const lPressed = useKeyPress("L");
-  useEffect(() => {
-    if (lPressed) {
+    const intervalId = setInterval(() => {
       ekl.current.layout();
       setNodes(ekl.current.getNodes());
-    }
-  }, [lPressed, setNodes]);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [setNodes]);
+
+  useEffect(() => {
+    ekl.current.setNodes(nodes);
+  }, [nodes]);
 
   const tabPressed = useKeyPress("Tab");
   useEffect(() => {
     if (tabPressed) {
-      if (!currentNode.current) return;
+      if (!currentNode.current) {
+        return;
+      }
 
       const id = uuidv4();
       const newNode: MyNode = {
@@ -69,6 +119,7 @@ export default function FlowEditor() {
         },
         selected: false,
         type: "markdownNode",
+        parentNode: currentNode.current.id,
       };
 
       const newEdge: MyEdge = {
@@ -76,36 +127,40 @@ export default function FlowEditor() {
         target: id,
         source: currentNode.current.id,
       };
+
       reactFlowInstance.addNodes(newNode);
       reactFlowInstance.addEdges(newEdge);
-
-      // ekl.current.setEdges(edges);
-      // ekl.current.setNodes(nodes);
     }
-  }, [tabPressed, reactFlowInstance, setNodes]);
+
+    return () => {};
+  }, [tabPressed, reactFlowInstance]);
 
   useEffect(() => {
     reactFlowInstance.setCenter(0, 0, { zoom: 1 });
   }, [reactFlowInstance]);
 
-  const nodeTypes = useMemo(() => {
-    return {
+  const nodeTypes = useMemo(
+    () => ({
       markdownNode: MarkdownNode,
-    };
-  }, []);
+      noteNode: NoteNode,
+    }),
+    []
+  );
 
-  const edgeTypes = useMemo(() => {
-    return {
+  const edgeTypes = useMemo(
+    () => ({
       myEdge: ButtonEdge,
-    };
-  }, []);
+    }),
+    []
+  );
 
   const hanldeNodeClick = useCallback(
     (event: React.MouseEvent, node: MyNode) => {
-      // setCurrentSelectedNode(node);
-      // console.log(node);
+      currentNode.current = node;
+      setCurrentEditNode(node);
+      console.log(node);
     },
-    []
+    [setCurrentEditNode]
   );
 
   const hanldeNodeDoubleClick = useCallback(
@@ -130,36 +185,38 @@ export default function FlowEditor() {
   );
 
   return (
-    <ReactFlow
-      proOptions={{ hideAttribution: true }}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onNodeClick={hanldeNodeClick}
-      nodes={nodes}
-      onNodesChange={handleNodesChange}
-      onNodeDoubleClick={hanldeNodeDoubleClick}
-      edges={edges}
-      onPaneClick={handlePanelClick}
-    >
-      <Background variant={BackgroundVariant.Lines} />
-      <Controls>
-        <ControlButton
-          onClick={() => alert("Something magical just happened. ✨")}
-        >
-          1
-        </ControlButton>
-        <ControlButton
-          onClick={() => alert("Something magical just happened. ✨")}
-        >
-          2
-        </ControlButton>
-      </Controls>
-      <Panel position="top-left">
-        <ButtonGroups />
-      </Panel>
-      <Panel position="top-right">
-        <UserAvatars />
-      </Panel>
-    </ReactFlow>
+    <div className="w-full h-screen">
+      <ReactFlow
+        proOptions={{ hideAttribution: false }}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodeClick={hanldeNodeClick}
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        onNodeDoubleClick={hanldeNodeDoubleClick}
+        edges={edges}
+        onPaneClick={handlePanelClick}
+      >
+        <Background variant={BackgroundVariant.Cross} />
+        <Controls>
+          <ControlButton
+            onClick={() => alert("Something magical just happened. ✨")}
+          >
+            1
+          </ControlButton>
+          <ControlButton
+            onClick={() => alert("Something magical just happened. ✨")}
+          >
+            2
+          </ControlButton>
+        </Controls>
+        <Panel position="top-left">
+          <ButtonGroups />
+        </Panel>
+        <Panel position="top-right">
+          <UserAvatars />
+        </Panel>
+      </ReactFlow>
+    </div>
   );
 }

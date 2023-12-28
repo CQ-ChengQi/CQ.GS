@@ -23,11 +23,11 @@ export function FlowEditorProvider({
   const [currentNode, setCurrentNode] = useState<MyNode>(nodes[0]);
   const [currentEditNode, setCurrentEditNode] = useState<MyNode>();
 
-  const ekl = useRef<ElkMindMap>(new ElkMindMap());
+  // const ekl = useRef<ElkMindMap>(new ElkMindMap());
 
-  useEffect(() => {
-    setNodes(ekl.current.getNodes());
-  }, [setNodes]);
+  // useEffect(() => {
+  //   setNodes(ekl.current.getNodes());
+  // }, [setNodes]);
 
   const addNode = useCallback(() => {}, []);
 

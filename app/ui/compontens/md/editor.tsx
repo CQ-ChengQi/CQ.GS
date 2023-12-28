@@ -1,11 +1,12 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import React, { useCallback } from "react";
 
 export type MdEditorProps = {
   onUpdate: (value: string) => void;
   className?: string;
   content?: string;
+  editable: boolean;
 };
 
 export default function MdEditor(props: MdEditorProps) {
@@ -23,15 +24,30 @@ export default function MdEditor(props: MdEditorProps) {
       props.onUpdate(html);
     },
     injectCSS: true,
-    onFocus: ({ editor, event }) => {
-      console.log("focus");
-      event.stopPropagation();
-    },
+    onFocus: ({ editor, event }) => {},
+    onBlur: ({ editor, event }) => {},
   });
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Tab" || event.key === "Enter") {
+        event.preventDefault();
+      }
+    },
+    []
+  );
 
   if (!editor) {
     return null;
   }
 
-  return <EditorContent editor={editor} className={props.className} />;
+  editor.setEditable(true);
+
+  return (
+    <EditorContent
+      editor={editor}
+      className={props.className}
+      onKeyDown={handleKeyDown}
+    />
+  );
 }

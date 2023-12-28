@@ -14,7 +14,7 @@ import clsx from "clsx";
 
 export type MarkdownNodeProps = NodeProps<NodeData>;
 
-export default function MarkdownNode(props: MarkdownNodeProps) {
+export default function NoteNode(props: MarkdownNodeProps) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const storeApi = useStoreApi();
   const state = storeApi.getState();
@@ -29,7 +29,7 @@ export default function MarkdownNode(props: MarkdownNodeProps) {
   }, [nodeRef, props.id, state]);
 
   const handleUpdate = (val: string) => {
-    // console.log(val);
+    console.log(val);
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -39,7 +39,10 @@ export default function MarkdownNode(props: MarkdownNodeProps) {
   };
 
   return (
-    <div ref={nodeRef}>
+    <div
+      ref={nodeRef}
+      className="focus:border focus:border-red-700 focus:border-solid"
+    >
       <Handle type="target" position={Position.Left} className="" />
       <Handle type="source" position={Position.Right} className="" />
 
@@ -49,16 +52,11 @@ export default function MarkdownNode(props: MarkdownNodeProps) {
           "cursor-text border-red-400 border-solid border":
             props.id === currentEditNode?.id,
           "border-blue-400 border-solid border": props.selected,
+          "": true,
         })}
         onMouseDownCapture={handleMouseDown}
       >
-        <div className="px-4 py-2">
-          <MdEditor
-            onUpdate={handleUpdate}
-            content={props.data.content}
-            editable={props.id === currentEditNode?.id}
-          />
-        </div>
+        <div className="px-4 py-2">这是普通节点</div>
       </div>
     </div>
   );

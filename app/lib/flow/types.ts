@@ -8,6 +8,7 @@ export type NodeData = {
   content?: string;
   width?: number;
   height?: number;
+  parentId?: string;
 };
 
 export type MyNode = Node<NodeData>;
