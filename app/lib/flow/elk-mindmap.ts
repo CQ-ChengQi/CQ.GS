@@ -22,6 +22,9 @@ export class ElkMindMap {
       y: 0,
       layoutOptions: {
         "elk.algorithm": "radial",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+        "elk.spacing.nodeNode": "80",
+        fixedAlignment: "LEFTUP",
       },
       children: [],
       edges: [],
@@ -44,10 +47,6 @@ export class ElkMindMap {
       id: node.id,
       width: node.width || 100,
       height: node.height || 50,
-      layoutOptions: {
-        "elk.algorithm": "layered",
-        "elk.direction": "LEFT",
-      },
     };
     return elkRootNode;
   }
@@ -61,17 +60,33 @@ export class ElkMindMap {
     return result;
   }
 
-  public toNode(node: MyNode, elkNode: ElkNode) {
-    const result: MyNode = {
-      ...node,
-      position: {
-        x: elkNode.x ?? 0,
-        y: elkNode.y ?? 0,
-      },
-    };
-    return result;
+  public toNode(elkNode: ElkNode) {
+    const node = this._nodes.find((s) => s.id == elkNode.id);
+    if (node) {
+      const result: MyNode = {
+        ...node,
+        position: {
+          x: elkNode.x ?? 0,
+          y: elkNode.y ?? 0,
+        },
+      };
+      return result;
+    }
   }
 
+  public updateXY(elkNode: ElkNode) {
+    const node = this._nodes.find((s) => s.id == elkNode.id);
+    if (node) {
+      node.position.x = elkNode.x ?? 0;
+      node.position.y = elkNode.y ?? 0;
+    }
+  }
+
+  /**
+   * 将平展数据转换为嵌套结构。
+   * @param parentNode 父节点。
+   * @param elkNode 节点。
+   */
   public recursionNode(parentNode: MyNode, elkNode: ElkNode) {
     const childrenList = this._nodes.filter(
       (s) => s.parentNode === parentNode.id
@@ -89,13 +104,16 @@ export class ElkMindMap {
     }
   }
 
+  /**
+   * 将递归数据转换为一级数据。
+   * @param parentNode 父节点。
+   * @param nodes 节点集合。
+   */
   public recursionElkNode(parentNode: ElkNode, nodes: Array<MyNode>) {
     if (parentNode.children && parentNode.children.length > 0) {
       parentNode.children.forEach((val) => {
-        const node = this._nodes.find((s) => s.id === val.id);
-        if (node) {
-          nodes.push(this.toNode(node, val));
-        }
+        const node = this.toNode(val);
+        if (node) nodes.push(node);
       });
     }
   }
@@ -121,27 +139,12 @@ export class ElkMindMap {
   }
 
   public layout() {
-    this.mapTo();
-    console.log(this._graph);
+    this._graph.children = this._nodes.map((s) => this.toElkNode(s));
+    this._graph.edges = this._edges.map((s) => this.toElkEdge(s));
     this._elk
       .layout(this._graph)
       .then(({ children, edges }) => {
-        console.log(children);
-
-        // children?.forEach((value) => {
-        //   const node = this._nodes.find((f) => f.id === value.id);
-        //   if (node) {
-        //     node.position = {
-        //       x: value.x ?? 0,
-        //       y: value.y ?? 0,
-        //     };
-        //   }
-        // });
-        // edges?.forEach((value) => {
-        //   const edge = this._edges.find((f) => f.id === value.id);
-        //   if (edge) {
-        //   }
-        // });
+        children?.map((s) => this.updateXY(s));
       })
       .catch((error) => console.error("layout error:", error));
   }
